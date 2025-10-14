@@ -1,7 +1,7 @@
 local version = "InstallerOS v0.1"
 local versionFile = "version.txt"
 local versionFileID = ""
-local scriptPastebinID = ""
+local scriptLinkID = "https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/lunRCompiller"
 local filePath = fs.open("installedApps.txt", "r")
 shell.run("clear")
 print("===== LUNARCOMPILLER =====")
@@ -82,7 +82,7 @@ local function updateForce()
     if proceed == "y" then
         print("[installer] Force updating...")
         shell.run("rm installer")
-        local success, err = shell.run("pastebin get " .. scriptPastebinID .. " installer")
+        local success, err = shell.run("wget " .. scriptLinkID .. " installer")
         if success then
             term.setTextColor(successColor)
             print("[installer] Force update successful.")
