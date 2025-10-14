@@ -5,7 +5,7 @@ local scriptLinkID = "https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/he
 local filePath = fs.open("installedApps.txt", "r")
 shell.run("clear")
 print("===== LUNARCOMPILLER =====")
-print("To install a program, enter a number...")
+print("To install a program, enter a number.")
 print("[0] Lunar Software")
 print("[1] Lunar Server")
 print("[x] Vault Reader")
@@ -134,7 +134,7 @@ while true do
                 print("[2] Uninstall")
                 input = read()
                 if input == "0" then
-                    shell.run("[installer] installing: Lunar Software")
+                    print("[installer] installing: Lunar Software")
                     shell.run("pastebin get ZbBuC2bT startup")
                     shell.run("clear")
                     shell.run("installer")
@@ -214,6 +214,8 @@ while true do
             print("[installer] updating...")
             sleep(3)
             updateForce()
+		else
+			print("Unknown syntax: " .. input)
         end
     end
 end
