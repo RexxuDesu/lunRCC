@@ -1,0 +1,209 @@
+local version = "InstallerOS v0.1"
+local versionFile = "version.txt"
+local versionFileID = ""
+local scriptPastebinID = ""
+local filePath = fs.open("installedApps.txt", "r")
+shell.run("clear")
+print("===== LUNARCOMPILLER =====")
+print("To install a program, enter a number...")
+print("[0] Lunar Software")
+print("[1] Lunar Server")
+print("[x] Vault Reader")
+print("[x] Vault Detector")
+print("[4] EAS Receiver")
+print("[5] Engine Detector")
+print("[6] Status Receiver")
+print("[7] Exit")
+
+local function update()
+    print("[installer] Checking for updates...")
+    local success, err = shell.run("pastebin get " .. versionFileID .. " " .. versionFile)
+    if not success then
+		term.setTextColor(errorColor)
+        print("[installer] Failed to fetch version information from Pastebin:", err)
+		term.setTextColor(colors.white)
+    end
+    if fs.exists(versionFile) then
+        local file = fs.open(versionFile, "r")
+        if file then
+            local latestVersion = file.readLine()
+            file.close()
+            fs.delete(versionFile)
+            latestVersion = latestVersion:match("^%s*(.-)%s*$")
+            version = version:match("^%s*(.-)%s*$")
+            if latestVersion and latestVersion ~= version then
+                print("[installer] Latest version available: " .. latestVersion)
+                print("[installer] Current installed version: " .. version)
+				term.setTextColor(successColor)
+                io.write("[installer] Do you want to proceed with the update? (y/n): ")
+				term.setTextColor(colors.white)
+                local proceed = read()
+                if proceed:lower() == "y" then
+                    print("[installer] Updating...")
+                    shell.run("rm installer")
+                    local success, err = shell.run("pastebin get " .. scriptPastebinID .. " installer")
+                    if success then
+                        version = latestVersion
+						term.setTextColor(successColor)
+                        print("[installer] Script updated to version " .. latestVersion)
+						term.setTextColor(colors.white)
+                        return
+                        shell.run("installer")
+                    else
+						term.setTextColor(errorColor)
+                        print("[installer] Failed to update script:", err)
+						term.setTextColor(colors.white)
+                    end
+                else
+					term.setTextColor(errorColor)
+                    print("[installer] Update aborted.")
+					term.setTextColor(colors.white)
+                end
+            else
+				term.setTextColor(successColor)
+                print("[installer] No updates available. You are running the latest version.")
+				term.setTextColor(colors.white)
+            end
+        else
+			term.setTextColor(errorColor)
+            print("[installer] Failed to open version file for reading.")
+			term.setTextColor(colors.white)
+        end
+    else
+        print("[installer] Version file does not exist.")
+    end
+end
+
+local function updateForce()
+	term.setTextColor(errorColor)
+    print("[installer] Are you sure you want to force update? (y/n): ")
+	term.setTextColor(colors.white)
+    local proceed = read():lower()
+    if proceed == "y" then
+        print("[installer] Force updating...")
+        shell.run("rm installer")
+        local success, err = shell.run("pastebin get " .. scriptPastebinID .. " installer")
+        if success then
+            term.setTextColor(successColor)
+            print("[installer] Force update successful.")
+            term.setTextColor(colors.white)
+            return
+            shell.run("installer")
+        else
+            term.setTextColor(errorColor)
+            print("[installer] Failed to force update:", err)
+            term.setTextColor(colors.white)
+        end
+    else
+		term.setTextColor(errorColor)
+        print("[installer] Force update aborted.")
+		term.setTextColor(colors.white)
+    end
+end
+
+while true do
+    local input = read()
+    if input then
+        shell.run("clear")
+        if input == "0" then
+            print("===== LUNARCOMPILLER =====")
+            if fs.exists("startup") then
+                print("[installer]Program is already installed or another program is already installed")
+                print("[0] Return")
+                print("[1] Uninstall")
+                input = read()
+                if input == "0" then
+                    shell.run("clear")
+                    shell.run("installer")
+                elseif input == "1" then
+                    shell.run("rm startup")
+                    print("[installer] Successfully removed! Returning in 3s...")
+                    sleep(3)
+                    shell.run("clear")
+                    shell.run("installer")
+                else
+                    print("Unknown syntax: " .. input)
+                end
+            else
+                print("[0] Install")
+                print("[1] Reinstall")
+                print("[2] Uninstall")
+                if input == "0" then
+                    shell.run("[installer] installing: Lunar Software")
+                    shell.run("pastebin get ZbBuC2bT startup")
+                    shell.run("clear")
+                    shell.run("installer")
+                elseif input == "1" then
+                    shell.run("[installer] reinstalling: Lunar Software")
+                    shell.run("pastebin get ZbBuC2bT startup")
+                    shell.run("clear")
+                    shell.run("installer")
+                elseif input == "2" then
+                    shell.run("rm startup")
+                    print("[installer] Successfully removed! Returning in 3s...")
+                    sleep(3)
+                    shell.run("clear")
+                    shell.run("installer")
+                end
+            end
+        elseif input == "1" then
+            shell.run("clear")
+            print("===== LUNARCOMPILLER =====")
+            shell.run("[installer] installing: Lunar Server.")
+            shell.run("pastebin get YhnjmQe6 startup")
+            shell.run("pastebin get VTAfWsaC updater")
+            shell.run("pastebin get DLGsAwmt updaterForce")
+            --shell.run("pastebin get xx updaterAlpha")
+            --shell.run("pastebin get xx updaterBeta")
+            shell.run("clear")
+            shell.run("installer")
+        elseif input == "2" then
+            shell.run("clear")
+            print("===== LUNARCOMPILLER =====")
+            shell.run("[installer] installing: Vault Reader")
+            shell.run("pastebin get xx startup")
+            shell.run("clear")
+            shell.run("installer")
+        elseif input == "3" then
+            shell.run("clear")
+            print("===== LUNARCOMPILLER =====")
+            shell.run("[installer] installing: Vault Detector")
+            shell.run("pastebin get xx startup")
+            shell.run("clear")
+            shell.run("installer")
+        elseif input == "4" then
+            shell.run("clear")
+            print("===== LUNARCOMPILLER =====")
+            shell.run("[installer] installing: EAS Receiver")
+            shell.run("pastebin get DVPn6GP4 startup")
+            shell.run("clear")
+            shell.run("installer")
+        elseif input == "5" then
+            shell.run("clear")
+            print("===== LUNARCOMPILLER =====")
+            shell.run("[installer] installing: Engine Detector")
+            shell.run("pastebin get hL2ivUT8 startup")
+            shell.run("clear")
+            shell.run("installer")
+        elseif input == "6" then
+            shell.run("clear")
+            print("===== LUNARCOMPILLER =====")
+            shell.run("[installer] installing: Status Receiver")
+            shell.run("pastebin get id2qx8hi startup")
+            shell.run("clear")
+            shell.run("installer")
+        elseif input == "7" then
+            print("[installer] exiting program... Goodbye!")
+            sleep(3)
+            shell.run("exit")
+        elseif input == "apt upd" then
+            print("[installer] updating...")
+            sleep(3)
+            update()
+        elseif input == "apt -f upd" then
+            print("[installer] updating...")
+            sleep(3)
+            updateForce()
+        end
+    end
+end
