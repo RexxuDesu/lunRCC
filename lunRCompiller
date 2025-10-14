@@ -106,12 +106,13 @@ while true do
     if input then
         shell.run("clear")
         if input == "0" then
+            input = ""
             print("===== LUNARCOMPILLER =====")
+            sleep(0.1)
             if fs.exists("startup") then
                 print("[installer] Program is already installed or another program is already installed")
                 print("[0] Return")
                 print("[1] Uninstall")
-                input = ""
                 input = read()
                 if input == "0" then
                     shell.run("clear")
@@ -131,7 +132,6 @@ while true do
                 print("[0] Install")
                 print("[1] Reinstall")
                 print("[2] Uninstall")
-                input = ""
                 input = read()
                 if input == "0" then
                     shell.run("[installer] installing: Lunar Software")
