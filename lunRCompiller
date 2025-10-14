@@ -108,7 +108,7 @@ while true do
         if input == "0" then
             print("===== LUNARCOMPILLER =====")
             if fs.exists("startup") then
-                print("[installer]Program is already installed or another program is already installed")
+                print("[installer] Program is already installed or another program is already installed")
                 print("[0] Return")
                 print("[1] Uninstall")
                 input = read()
@@ -117,6 +117,8 @@ while true do
                     shell.run("installer")
                 elseif input == "1" then
                     shell.run("rm startup")
+                    shell.run("rm updater")
+                    shell.run("rm updaterForce")
                     print("[installer] Successfully removed! Returning in 3s...")
                     sleep(3)
                     shell.run("clear")
@@ -128,18 +130,24 @@ while true do
                 print("[0] Install")
                 print("[1] Reinstall")
                 print("[2] Uninstall")
+                input = read()
                 if input == "0" then
                     shell.run("[installer] installing: Lunar Software")
                     shell.run("pastebin get ZbBuC2bT startup")
                     shell.run("clear")
                     shell.run("installer")
                 elseif input == "1" then
+                    shell.run("rm startup")
+                    shell.run("rm updater")
+                    shell.run("rm updaterForce")
                     shell.run("[installer] reinstalling: Lunar Software")
                     shell.run("pastebin get ZbBuC2bT startup")
                     shell.run("clear")
                     shell.run("installer")
                 elseif input == "2" then
                     shell.run("rm startup")
+                    shell.run("rm updater")
+                    shell.run("rm updaterForce")
                     print("[installer] Successfully removed! Returning in 3s...")
                     sleep(3)
                     shell.run("clear")
