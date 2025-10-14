@@ -148,12 +148,14 @@ while true do
                     print("Unknown syntax: " .. input)
                 end
             else
-				print("[installer] Program is not yet installed.")
+				print("Program is not yet installed.")
                 print("[0] Install")
                 input = read()
                 if input == "0" then
                     print("[installer] installing: Lunar Software")
                     shell.run("pastebin get ZbBuC2bT startup")
+					print("[installer] Successfully removed! Returning in 5s...")
+                    sleep(5)
                     shell.run("clear")
                     shell.run("installer")
                 end
