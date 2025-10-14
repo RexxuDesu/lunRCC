@@ -1,4 +1,4 @@
-local version = "InstallerOS v0.1"
+local version = "InstallerOS v0.3"
 local versionFile = "version.txt"
 local versionFileID = ""
 local scriptLinkID = "https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/lunRCompiller"
@@ -112,46 +112,48 @@ while true do
             if fs.exists("startup") then
                 print("[installer] Program is already installed or another program is already installed")
                 print("[0] Return")
-                print("[1] Uninstall")
+				print("[1] Reinstall")
+                print("[2] Uninstall")
                 input = read()
                 if input == "0" then
                     shell.run("clear")
                     shell.run("installer")
-                elseif input == "1" then
+				elseif input == "1" then
+					shell.run("[installer] reinstalling: Lunar Software")
+					shell.run("rm startup")
+					if fs.exists("updater") then
+						shell.run("rm updater")
+					end
+					if fs.exists("updater") then
+						shell.run("rm updaterForce")
+					end
+                    shell.run("pastebin get ZbBuC2bT startup")
+                    shell.run("clear")
+                    shell.run("installer")
+
+                elseif input == "2" then
+					shell.run("[installer] uninstalling: Lunar Software")
                     shell.run("rm startup")
-                    shell.run("rm updater")
-                    shell.run("rm updaterForce")
-                    print("[installer] Successfully removed! Returning in 3s...")
-                    sleep(3)
+					if fs.exists("updater") then
+						shell.run("rm updater")
+					end
+					if fs.exists("updater") then
+						shell.run("rm updaterForce")
+					end
+                    print("[installer] Successfully removed! Returning in 5s...")
+                    sleep(5)
                     shell.run("clear")
                     shell.run("installer")
                 else
                     print("Unknown syntax: " .. input)
                 end
             else
+				print("[installer] Program is not yet installed.")
                 print("[0] Install")
-                print("[1] Reinstall")
-                print("[2] Uninstall")
                 input = read()
                 if input == "0" then
                     print("[installer] installing: Lunar Software")
                     shell.run("pastebin get ZbBuC2bT startup")
-                    shell.run("clear")
-                    shell.run("installer")
-                elseif input == "1" then
-                    shell.run("rm startup")
-                    shell.run("rm updater")
-                    shell.run("rm updaterForce")
-                    shell.run("[installer] reinstalling: Lunar Software")
-                    shell.run("pastebin get ZbBuC2bT startup")
-                    shell.run("clear")
-                    shell.run("installer")
-                elseif input == "2" then
-                    shell.run("rm startup")
-                    shell.run("rm updater")
-                    shell.run("rm updaterForce")
-                    print("[installer] Successfully removed! Returning in 3s...")
-                    sleep(3)
                     shell.run("clear")
                     shell.run("installer")
                 end
