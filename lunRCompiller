@@ -84,18 +84,18 @@ local function updateForce()
         shell.run("rm installer")
         local success, err = shell.run("wget " .. scriptLinkID .. " installer")
         if success then
-            term.setTextColor(successColor)
+            term.setTextColor(colors.green)
             print("[installer] Force update successful.")
             term.setTextColor(colors.white)
             return
             shell.run("installer")
         else
-            term.setTextColor(errorColor)
+            term.setTextColor(colors.red)
             print("[installer] Failed to force update:", err)
             term.setTextColor(colors.white)
         end
     else
-		term.setTextColor(errorColor)
+		term.setTextColor(colors.red)
         print("[installer] Force update aborted.")
 		term.setTextColor(colors.white)
     end
