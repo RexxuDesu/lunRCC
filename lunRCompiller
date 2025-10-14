@@ -75,7 +75,7 @@ local function update()
 end
 
 local function updateForce()
-	term.setTextColor(errorColor)
+	term.setTextColor(colors.red)
     print("[installer] Are you sure you want to force update? (y/n): ")
 	term.setTextColor(colors.white)
     local proceed = read():lower()
