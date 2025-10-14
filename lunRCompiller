@@ -110,7 +110,7 @@ while true do
             print("===== LUNARCOMPILLER =====")
             sleep(0.1)
             if fs.exists("startup") then
-                print("[installer] Program is already installed or another program is already installed")
+                print("Program is already installed or another program is already installed")
                 print("[0] Return")
 				print("[1] Reinstall")
                 print("[2] Uninstall")
@@ -128,6 +128,8 @@ while true do
 						shell.run("rm updaterForce")
 					end
                     shell.run("pastebin get ZbBuC2bT startup")
+                    print("[installer] Successfully reinstalled! Returning in 5s...")
+                    sleep(5)
                     shell.run("clear")
                     shell.run("installer")
 
@@ -146,6 +148,13 @@ while true do
                     shell.run("installer")
                 else
                     print("Unknown syntax: " .. input)
+                    sleep(2)
+                    shell.run("clear")
+                    print("===== LUNARCOMPILLER =====")
+                    print("Program is already installed or another program is already installed")
+                    print("[0] Return")
+                    print("[1] Reinstall")
+                    print("[2] Uninstall")
                 end
             else
 				print("Program is not yet installed.")
@@ -158,6 +167,12 @@ while true do
                     sleep(5)
                     shell.run("clear")
                     shell.run("installer")
+                else
+                    print("Unknown syntax: " .. input)
+                    sleep(2)
+                    shell.run("clear")
+                    print("===== LUNARCOMPILLER =====")
+                    print("[0] Install")
                 end
             end
         elseif input == "1" then
