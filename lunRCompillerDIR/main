@@ -223,9 +223,9 @@ while true do
 					if fs.exists("updater") then
 						shell.run("rm updaterForce")
 					end
-                    shell.run("wget startup")
-                    shell.run("wget updater")
-                    shell.run("wget updaterForce")
+                    shell.run("wget https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/lunRServerDIR/main startup")
+                    shell.run("wget https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/lunRServerDIR/mainUpdater updater")
+                    shell.run("wget https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/lunRServerDIR/mainUpdaterForce updaterForce")
                     print("[installer] Successfully reinstalled! Returning in 5s...")
                     sleep(5)
                     shell.run("clear")
@@ -260,9 +260,9 @@ while true do
                 input = read()
                 if input == "0" then
                     print("[installer] installing: Lunar Server")
-                    shell.run("wget startup")
-                    shell.run("wget updater")
-                    shell.run("wget updaterForce")
+                    shell.run("wget https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/lunRServerDIR/main startup")
+                    shell.run("wget https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/lunRServerDIR/mainUpdater updater")
+                    shell.run("wget https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/lunRServerDIR/mainUpdaterForce updaterForce")
                     if fs.exists("id.txt") then
                     else
                         local f = fs.open("id.txt", "w")
