@@ -3,18 +3,19 @@ local versionFile = "version.txt"
 local versionLinkID = "https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/lunRCompillerDIR/version.txt"
 local scriptLinkID = "https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/lunRCompillerDIR/main"
 local filePath = fs.open("installedApps.txt", "r")
-shell.run("clear")
-print("===== LUNARCOMPILLER =====")
-print("To install a program, enter a number.")
-print("[0] Lunar Software")
-print("[1] Lunar Server")
-print("[x] Vault Reader")
-print("[x] Vault Detector")
-print("[4] EAS Receiver")
-print("[5] Engine Detector")
-print("[6] Status Receiver")
-print("[7] Exit")
-
+local function pagePrint()
+    shell.run("clear")
+    print("===== LUNARCOMPILLER =====")
+    print("To install a program, enter a number.")
+    print("[0] Lunar Software")
+    print("[1] Lunar Server")
+    print("[x] Vault Reader")
+    print("[x] Vault Detector")
+    print("[4] EAS Receiver")
+    print("[5] Engine Detector")
+    print("[6] Status Receiver")
+    print("[7] Exit")
+end
 local function update()
     print("[installer] Checking for updates...")
     local success, err = shell.run("wget " .. versionLinkID .. " " .. versionFile)
@@ -95,7 +96,6 @@ local function update()
         shell.run("installer")
     end
 end
-
 local function updateForce()
 	term.setTextColor(colors.red)
     print("[installer] Are you sure you want to force update? (y/n): ")
@@ -132,7 +132,6 @@ local function updateForce()
         shell.run("installer")
     end
 end
-
 while true do
     local input = read()
     if input then
@@ -169,17 +168,7 @@ while true do
                 else
                     print("Unknown syntax: " .. input)
                     sleep(2)
-                    shell.run("clear")
-                    print("===== LUNARCOMPILLER =====")
-                    print("To install a program, enter a number.")
-                    print("[0] Lunar Software")
-                    print("[1] Lunar Server")
-                    print("[x] Vault Reader")
-                    print("[x] Vault Detector")
-                    print("[4] EAS Receiver")
-                    print("[5] Engine Detector")
-                    print("[6] Status Receiver")
-                    print("[7] Exit")
+                    pagePrint()
                 end
             else
 				print("Program is not yet installed.")
@@ -201,17 +190,7 @@ while true do
                 else
                     print("Unknown syntax: " .. input)
                     sleep(2)
-                    shell.run("clear")
-                    print("===== LUNARCOMPILLER =====")
-                    print("To install a program, enter a number.")
-                    print("[0] Lunar Software")
-                    print("[1] Lunar Server")
-                    print("[x] Vault Reader")
-                    print("[x] Vault Detector")
-                    print("[4] EAS Receiver")
-                    print("[5] Engine Detector")
-                    print("[6] Status Receiver")
-                    print("[7] Exit")
+                    pagePrint()
                 end
             end
         elseif input == "1" then
@@ -260,17 +239,7 @@ while true do
                 else
                     print("Unknown syntax: " .. input)
                     sleep(2)
-                    shell.run("clear")
-                    print("===== LUNARCOMPILLER =====")
-                    print("To install a program, enter a number.")
-                    print("[0] Lunar Software")
-                    print("[1] Lunar Server")
-                    print("[x] Vault Reader")
-                    print("[x] Vault Detector")
-                    print("[4] EAS Receiver")
-                    print("[5] Engine Detector")
-                    print("[6] Status Receiver")
-                    print("[7] Exit")
+                    pagePrint()
                 end
             else
 				print("Program is not yet installed.")
@@ -294,17 +263,7 @@ while true do
                 else
                     print("Unknown syntax: " .. input)
                     sleep(2)
-                    shell.run("clear")
-                    print("===== LUNARCOMPILLER =====")
-                    print("To install a program, enter a number.")
-                    print("[0] Lunar Software")
-                    print("[1] Lunar Server")
-                    print("[x] Vault Reader")
-                    print("[x] Vault Detector")
-                    print("[4] EAS Receiver")
-                    print("[5] Engine Detector")
-                    print("[6] Status Receiver")
-                    print("[7] Exit")
+                    pagePrint()
                 end
             end
         elseif input == "2" then
@@ -339,17 +298,7 @@ while true do
                 else
                     print("Unknown syntax: " .. input)
                     sleep(2)
-                    shell.run("clear")
-                    print("===== LUNARCOMPILLER =====")
-                    print("To install a program, enter a number.")
-                    print("[0] Lunar Software")
-                    print("[1] Lunar Server")
-                    print("[x] Vault Reader")
-                    print("[x] Vault Detector")
-                    print("[4] EAS Receiver")
-                    print("[5] Engine Detector")
-                    print("[6] Status Receiver")
-                    print("[7] Exit")
+                    pagePrint()
                 end
             else
 				print("Program is not yet installed.")
@@ -371,17 +320,7 @@ while true do
                 else
                     print("Unknown syntax: " .. input)
                     sleep(2)
-                    shell.run("clear")
-                    print("===== LUNARCOMPILLER =====")
-                    print("To install a program, enter a number.")
-                    print("[0] Lunar Software")
-                    print("[1] Lunar Server")
-                    print("[x] Vault Reader")
-                    print("[x] Vault Detector")
-                    print("[4] EAS Receiver")
-                    print("[5] Engine Detector")
-                    print("[6] Status Receiver")
-                    print("[7] Exit")
+                    pagePrint()
                 end
             end
         elseif input == "3" then
@@ -416,17 +355,7 @@ while true do
                 else
                     print("Unknown syntax: " .. input)
                     sleep(2)
-                    shell.run("clear")
-                    print("===== LUNARCOMPILLER =====")
-                    print("To install a program, enter a number.")
-                    print("[0] Lunar Software")
-                    print("[1] Lunar Server")
-                    print("[x] Vault Reader")
-                    print("[x] Vault Detector")
-                    print("[4] EAS Receiver")
-                    print("[5] Engine Detector")
-                    print("[6] Status Receiver")
-                    print("[7] Exit")
+                    pagePrint()
                 end
             else
 				print("Program is not yet installed.")
@@ -448,17 +377,7 @@ while true do
                 else
                     print("Unknown syntax: " .. input)
                     sleep(2)
-                    shell.run("clear")
-                    print("===== LUNARCOMPILLER =====")
-                    print("To install a program, enter a number.")
-                    print("[0] Lunar Software")
-                    print("[1] Lunar Server")
-                    print("[x] Vault Reader")
-                    print("[x] Vault Detector")
-                    print("[4] EAS Receiver")
-                    print("[5] Engine Detector")
-                    print("[6] Status Receiver")
-                    print("[7] Exit")
+                    pagePrint()
                 end
             end
         elseif input == "4" then
@@ -493,17 +412,7 @@ while true do
                 else
                     print("Unknown syntax: " .. input)
                     sleep(2)
-                    shell.run("clear")
-                    print("===== LUNARCOMPILLER =====")
-                    print("To install a program, enter a number.")
-                    print("[0] Lunar Software")
-                    print("[1] Lunar Server")
-                    print("[x] Vault Reader")
-                    print("[x] Vault Detector")
-                    print("[4] EAS Receiver")
-                    print("[5] Engine Detector")
-                    print("[6] Status Receiver")
-                    print("[7] Exit")
+                    pagePrint()
                 end
             else
 				print("Program is not yet installed.")
@@ -525,17 +434,7 @@ while true do
                 else
                     print("Unknown syntax: " .. input)
                     sleep(2)
-                    shell.run("clear")
-                    print("===== LUNARCOMPILLER =====")
-                    print("To install a program, enter a number.")
-                    print("[0] Lunar Software")
-                    print("[1] Lunar Server")
-                    print("[x] Vault Reader")
-                    print("[x] Vault Detector")
-                    print("[4] EAS Receiver")
-                    print("[5] Engine Detector")
-                    print("[6] Status Receiver")
-                    print("[7] Exit")
+                    pagePrint()
                 end
             end
         elseif input == "5" then
@@ -570,17 +469,7 @@ while true do
                 else
                     print("Unknown syntax: " .. input)
                     sleep(2)
-                    shell.run("clear")
-                    print("===== LUNARCOMPILLER =====")
-                    print("To install a program, enter a number.")
-                    print("[0] Lunar Software")
-                    print("[1] Lunar Server")
-                    print("[x] Vault Reader")
-                    print("[x] Vault Detector")
-                    print("[4] EAS Receiver")
-                    print("[5] Engine Detector")
-                    print("[6] Status Receiver")
-                    print("[7] Exit")
+                    pagePrint()
                 end
             else
 				print("Program is not yet installed.")
@@ -602,17 +491,7 @@ while true do
                 else
                     print("Unknown syntax: " .. input)
                     sleep(2)
-                    shell.run("clear")
-                    print("===== LUNARCOMPILLER =====")
-                    print("To install a program, enter a number.")
-                    print("[0] Lunar Software")
-                    print("[1] Lunar Server")
-                    print("[x] Vault Reader")
-                    print("[x] Vault Detector")
-                    print("[4] EAS Receiver")
-                    print("[5] Engine Detector")
-                    print("[6] Status Receiver")
-                    print("[7] Exit")
+                    pagePrint()
                 end
             end
         elseif input == "6" then
@@ -647,17 +526,7 @@ while true do
                 else
                     print("Unknown syntax: " .. input)
                     sleep(2)
-                    shell.run("clear")
-                    print("===== LUNARCOMPILLER =====")
-                    print("To install a program, enter a number.")
-                    print("[0] Lunar Software")
-                    print("[1] Lunar Server")
-                    print("[x] Vault Reader")
-                    print("[x] Vault Detector")
-                    print("[4] EAS Receiver")
-                    print("[5] Engine Detector")
-                    print("[6] Status Receiver")
-                    print("[7] Exit")
+                    pagePrint()
                 end
             else
 				print("Program is not yet installed.")
@@ -679,17 +548,7 @@ while true do
                 else
                     print("Unknown syntax: " .. input)
                     sleep(2)
-                    shell.run("clear")
-                    print("===== LUNARCOMPILLER =====")
-                    print("To install a program, enter a number.")
-                    print("[0] Lunar Software")
-                    print("[1] Lunar Server")
-                    print("[x] Vault Reader")
-                    print("[x] Vault Detector")
-                    print("[4] EAS Receiver")
-                    print("[5] Engine Detector")
-                    print("[6] Status Receiver")
-                    print("[7] Exit")
+                    pagePrint()
                 end
             end
         elseif input == "7" then
