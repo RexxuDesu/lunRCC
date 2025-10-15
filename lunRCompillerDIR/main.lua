@@ -213,7 +213,7 @@ while true do
 					if fs.exists("updater") then
 						shell.run("rm updater")
 					end
-					if fs.exists("updater") then
+					if fs.exists("updaterForce") then
 						shell.run("rm updaterForce")
 					end
                     shell.run("wget https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/lunRServerDIR/main.lua startup")
@@ -230,7 +230,7 @@ while true do
 					if fs.exists("updater") then
 						shell.run("rm updater")
 					end
-					if fs.exists("updater") then
+					if fs.exists("updaterForce") then
 						shell.run("rm updaterForce")
 					end
                     print("[installer] Successfully removed! Returning in 5s...")
