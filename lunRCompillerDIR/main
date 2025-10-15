@@ -1,4 +1,4 @@
-local version = "lunRCompiller beta 0.4.1"
+local version = "lunRCompiller beta 0.4.2"
 local versionFile = "version.txt"
 local versionLinkID = "https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/lunRCompillerDIR/version.txt"
 local scriptLinkID = "https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/lunRCompillerDIR/main"
@@ -47,30 +47,52 @@ local function update()
 						term.setTextColor(colors.green)
                         print("[installer] Script updated to version " .. latestVersion)
 						term.setTextColor(colors.white)
-                        return
+                        print("[installer] Returning in 5s...")
+                        sleep(5)
+                        shell.run("clear")
                         shell.run("installer")
                     else
 						term.setTextColor(colors.red)
                         print("[installer] Failed to update script:", err)
 						term.setTextColor(colors.white)
+                        print("[installer] Returning in 5s...")
+                        sleep(5)
+                        shell.run("clear")
+                        shell.run("installer")
                     end
                 else
 					term.setTextColor(colors.red)
                     print("[installer] Update aborted.")
 					term.setTextColor(colors.white)
+                    print("[installer] Returning in 5s...")
+                    sleep(5)
+                    shell.run("clear")
+                    shell.run("installer")
                 end
             else
 				term.setTextColor(colors.green)
                 print("[installer] No updates available. You are running the latest version.")
 				term.setTextColor(colors.white)
+                print("[installer] Returning in 5s...")
+                sleep(5)
+                shell.run("clear")
+                shell.run("installer")
             end
         else
 			term.setTextColor(colors.red)
             print("[installer] Failed to open version file for reading.")
 			term.setTextColor(colors.white)
+            print("[installer] Returning in 5s...")
+            sleep(5)
+            shell.run("clear")
+            shell.run("installer")
         end
     else
         print("[installer] Version file does not exist.")
+        print("[installer] Returning in 5s...")
+        sleep(5)
+        shell.run("clear")
+        shell.run("installer")
     end
 end
 
@@ -87,17 +109,27 @@ local function updateForce()
             term.setTextColor(colors.green)
             print("[installer] Force update successful.")
             term.setTextColor(colors.white)
-            return
+            print("[installer] Returning in 5s...")
+            sleep(5)
+            shell.run("clear")
             shell.run("installer")
         else
             term.setTextColor(colors.red)
             print("[installer] Failed to force update:", err)
             term.setTextColor(colors.white)
+            print("[installer] Returning in 5s...")
+            sleep(5)
+            shell.run("clear")
+            shell.run("installer")
         end
     else
 		term.setTextColor(colors.red)
         print("[installer] Force update aborted.")
 		term.setTextColor(colors.white)
+        print("[installer] Returning in 5s...")
+        sleep(5)
+        shell.run("clear")
+        shell.run("installer")
     end
 end
 
