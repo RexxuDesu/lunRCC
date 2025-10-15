@@ -1,4 +1,4 @@
-.local version = "lunRCompiller beta 0.4"
+local version = "lunRCompiller beta 0.4.1"
 local versionFile = "version.txt"
 local versionLinkID = "https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/lunRCompillerDIR/version.txt"
 local scriptLinkID = "https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/lunRCompillerDIR/main"
@@ -41,7 +41,7 @@ local function update()
                 if proceed:lower() == "y" then
                     print("[installer] Updating...")
                     shell.run("rm installer")
-                    local success, err = shell.run("pastebin get " .. scriptPastebinID .. " installer")
+                    local success, err = shell.run("wget " .. scriptLinkID .. " installer")
                     if success then
                         version = latestVersion
 						term.setTextColor(successColor)
