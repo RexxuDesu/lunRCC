@@ -1,1 +1,1 @@
-wget https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/lunRCompillerDIR/main installer
+wget https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/lunRCompillerDIR/main.lua installer
