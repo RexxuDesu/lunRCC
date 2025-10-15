@@ -1,4 +1,4 @@
-local version = "lunRCompiller beta 0.4.2"
+local version = "lunRCompiller beta 0.4.3"
 local versionFile = "version.txt"
 local versionLinkID = "https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/lunRCompillerDIR/version.txt"
 local scriptLinkID = "https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/lunRCompillerDIR/main"
@@ -153,12 +153,6 @@ while true do
 				elseif input == "1" then
 					shell.run("[installer] reinstalling: Lunar Software")
 					shell.run("rm startup")
-					if fs.exists("updater") then
-						shell.run("rm updater")
-					end
-					if fs.exists("updater") then
-						shell.run("rm updaterForce")
-					end
                     shell.run("wget https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/lunRTerminalDIR/main startup")
                     print("[installer] Successfully reinstalled! Returning in 5s...")
                     sleep(5)
@@ -167,6 +161,78 @@ while true do
 
                 elseif input == "2" then
 					shell.run("[installer] uninstalling: Lunar Software")
+                    shell.run("rm startup")
+                    print("[installer] Successfully removed! Returning in 5s...")
+                    sleep(5)
+                    shell.run("clear")
+                    shell.run("installer")
+                else
+                    print("Unknown syntax: " .. input)
+                    sleep(2)
+                    shell.run("clear")
+                    print("===== LUNARCOMPILLER =====")
+                    print("Program is already installed or another program is already installed")
+                    print("[0] Return")
+                    print("[1] Reinstall")
+                    print("[2] Uninstall")
+                end
+            else
+				print("Program is not yet installed.")
+                print("[0] Install")
+                input = read()
+                if input == "0" then
+                    print("[installer] installing: Lunar Software")
+                    shell.run("wget https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/lunRTerminalDIR/main startup")
+                    if fs.exists("id.txt") then
+                    else
+                        local f = fs.open("id.txt", "w")
+                        f.write("")
+                        f.close()
+                    end
+					print("[installer] Successfully installed! Returning in 5s...")
+                    sleep(5)
+                    shell.run("clear")
+                    shell.run("installer")
+                else
+                    print("Unknown syntax: " .. input)
+                    sleep(2)
+                    shell.run("clear")
+                    print("===== LUNARCOMPILLER =====")
+                    print("[0] Install")
+                end
+            end
+        elseif input == "1" then
+            input = ""
+            print("===== LUNARCOMPILLER =====")
+            sleep(0.1)
+            if fs.exists("startup") then
+                print("Program is already installed or another program is already installed")
+                print("[0] Return")
+				print("[1] Reinstall")
+                print("[2] Uninstall")
+                input = read()
+                if input == "0" then
+                    shell.run("clear")
+                    shell.run("installer")
+				elseif input == "1" then
+					shell.run("[installer] reinstalling: Lunar Server")
+					shell.run("rm startup")
+					if fs.exists("updater") then
+						shell.run("rm updater")
+					end
+					if fs.exists("updater") then
+						shell.run("rm updaterForce")
+					end
+                    shell.run("wget startup")
+                    shell.run("wget updater")
+                    shell.run("wget updaterForce")
+                    print("[installer] Successfully reinstalled! Returning in 5s...")
+                    sleep(5)
+                    shell.run("clear")
+                    shell.run("installer")
+
+                elseif input == "2" then
+					shell.run("[installer] uninstalling: Lunar Server")
                     shell.run("rm startup")
 					if fs.exists("updater") then
 						shell.run("rm updater")
@@ -193,9 +259,17 @@ while true do
                 print("[0] Install")
                 input = read()
                 if input == "0" then
-                    print("[installer] installing: Lunar Software")
-                    shell.run("wget https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/lunRTerminalDIR/main startup")
-					print("[installer] Successfully removed! Returning in 5s...")
+                    print("[installer] installing: Lunar Server")
+                    shell.run("wget startup")
+                    shell.run("wget updater")
+                    shell.run("wget updaterForce")
+                    if fs.exists("id.txt") then
+                    else
+                        local f = fs.open("id.txt", "w")
+                        f.write("")
+                        f.close()
+                    end
+					print("[installer] Successfully installed! Returning in 5s...")
                     sleep(5)
                     shell.run("clear")
                     shell.run("installer")
@@ -207,52 +281,326 @@ while true do
                     print("[0] Install")
                 end
             end
-        elseif input == "1" then
-            shell.run("clear")
-            print("===== LUNARCOMPILLER =====")
-            shell.run("[installer] installing: Lunar Server.")
-            shell.run("pastebin get YhnjmQe6 startup")
-            shell.run("pastebin get VTAfWsaC updater")
-            shell.run("pastebin get DLGsAwmt updaterForce")
-            --shell.run("pastebin get xx updaterAlpha")
-            --shell.run("pastebin get xx updaterBeta")
-            shell.run("clear")
-            shell.run("installer")
         elseif input == "2" then
-            shell.run("clear")
+            input = ""
             print("===== LUNARCOMPILLER =====")
-            shell.run("[installer] installing: Vault Reader")
-            shell.run("pastebin get xx startup")
-            shell.run("clear")
-            shell.run("installer")
+            sleep(0.1)
+            if fs.exists("startup") then
+                print("Program is already installed or another program is already installed")
+                print("[0] Return")
+				print("[1] Reinstall")
+                print("[2] Uninstall")
+                input = read()
+                if input == "0" then
+                    shell.run("clear")
+                    shell.run("installer")
+				elseif input == "1" then
+					shell.run("[installer] reinstalling: Vault Reader")
+					shell.run("rm startup")
+                    shell.run("wget startup")
+                    print("[installer] Successfully reinstalled! Returning in 5s...")
+                    sleep(5)
+                    shell.run("clear")
+                    shell.run("installer")
+
+                elseif input == "2" then
+					shell.run("[installer] uninstalling: Vault Reader")
+                    shell.run("rm startup")
+                    print("[installer] Successfully removed! Returning in 5s...")
+                    sleep(5)
+                    shell.run("clear")
+                    shell.run("installer")
+                else
+                    print("Unknown syntax: " .. input)
+                    sleep(2)
+                    shell.run("clear")
+                    print("===== LUNARCOMPILLER =====")
+                    print("Program is already installed or another program is already installed")
+                    print("[0] Return")
+                    print("[1] Reinstall")
+                    print("[2] Uninstall")
+                end
+            else
+				print("Program is not yet installed.")
+                print("[0] Install")
+                input = read()
+                if input == "0" then
+                    print("[installer] installing: Vault Reader")
+                    shell.run("wget  startup")
+                    if fs.exists("id.txt") then
+                    else
+                        local f = fs.open("id.txt", "w")
+                        f.write("")
+                        f.close()
+                    end
+					print("[installer] Successfully installed! Returning in 5s...")
+                    sleep(5)
+                    shell.run("clear")
+                    shell.run("installer")
+                else
+                    print("Unknown syntax: " .. input)
+                    sleep(2)
+                    shell.run("clear")
+                    print("===== LUNARCOMPILLER =====")
+                    print("[0] Install")
+                end
+            end
         elseif input == "3" then
-            shell.run("clear")
+            input = ""
             print("===== LUNARCOMPILLER =====")
-            shell.run("[installer] installing: Vault Detector")
-            shell.run("pastebin get xx startup")
-            shell.run("clear")
-            shell.run("installer")
+            sleep(0.1)
+            if fs.exists("startup") then
+                print("Program is already installed or another program is already installed")
+                print("[0] Return")
+				print("[1] Reinstall")
+                print("[2] Uninstall")
+                input = read()
+                if input == "0" then
+                    shell.run("clear")
+                    shell.run("installer")
+				elseif input == "1" then
+					shell.run("[installer] reinstalling: Vault Detector")
+					shell.run("rm startup")
+                    shell.run("wget startup")
+                    print("[installer] Successfully reinstalled! Returning in 5s...")
+                    sleep(5)
+                    shell.run("clear")
+                    shell.run("installer")
+
+                elseif input == "2" then
+					shell.run("[installer] uninstalling: Vault Detector")
+                    shell.run("rm startup")
+                    print("[installer] Successfully removed! Returning in 5s...")
+                    sleep(5)
+                    shell.run("clear")
+                    shell.run("installer")
+                else
+                    print("Unknown syntax: " .. input)
+                    sleep(2)
+                    shell.run("clear")
+                    print("===== LUNARCOMPILLER =====")
+                    print("Program is already installed or another program is already installed")
+                    print("[0] Return")
+                    print("[1] Reinstall")
+                    print("[2] Uninstall")
+                end
+            else
+				print("Program is not yet installed.")
+                print("[0] Install")
+                input = read()
+                if input == "0" then
+                    print("[installer] installing: Vault Detector")
+                    shell.run("wget  startup")
+                    if fs.exists("id.txt") then
+                    else
+                        local f = fs.open("id.txt", "w")
+                        f.write("")
+                        f.close()
+                    end
+					print("[installer] Successfully installed! Returning in 5s...")
+                    sleep(5)
+                    shell.run("clear")
+                    shell.run("installer")
+                else
+                    print("Unknown syntax: " .. input)
+                    sleep(2)
+                    shell.run("clear")
+                    print("===== LUNARCOMPILLER =====")
+                    print("[0] Install")
+                end
+            end
         elseif input == "4" then
-            shell.run("clear")
+            input = ""
             print("===== LUNARCOMPILLER =====")
-            shell.run("[installer] installing: EAS Receiver")
-            shell.run("pastebin get DVPn6GP4 startup")
-            shell.run("clear")
-            shell.run("installer")
+            sleep(0.1)
+            if fs.exists("startup") then
+                print("Program is already installed or another program is already installed")
+                print("[0] Return")
+				print("[1] Reinstall")
+                print("[2] Uninstall")
+                input = read()
+                if input == "0" then
+                    shell.run("clear")
+                    shell.run("installer")
+				elseif input == "1" then
+					shell.run("[installer] reinstalling: EAS Receiver")
+					shell.run("rm startup")
+                    shell.run("wget startup")
+                    print("[installer] Successfully reinstalled! Returning in 5s...")
+                    sleep(5)
+                    shell.run("clear")
+                    shell.run("installer")
+
+                elseif input == "2" then
+					shell.run("[installer] uninstalling: EAS Receiver")
+                    shell.run("rm startup")
+                    print("[installer] Successfully removed! Returning in 5s...")
+                    sleep(5)
+                    shell.run("clear")
+                    shell.run("installer")
+                else
+                    print("Unknown syntax: " .. input)
+                    sleep(2)
+                    shell.run("clear")
+                    print("===== LUNARCOMPILLER =====")
+                    print("Program is already installed or another program is already installed")
+                    print("[0] Return")
+                    print("[1] Reinstall")
+                    print("[2] Uninstall")
+                end
+            else
+				print("Program is not yet installed.")
+                print("[0] Install")
+                input = read()
+                if input == "0" then
+                    print("[installer] installing: EAS Receiver")
+                    shell.run("wget  startup")
+                    if fs.exists("id.txt") then
+                    else
+                        local f = fs.open("id.txt", "w")
+                        f.write("")
+                        f.close()
+                    end
+					print("[installer] Successfully installed! Returning in 5s...")
+                    sleep(5)
+                    shell.run("clear")
+                    shell.run("installer")
+                else
+                    print("Unknown syntax: " .. input)
+                    sleep(2)
+                    shell.run("clear")
+                    print("===== LUNARCOMPILLER =====")
+                    print("[0] Install")
+                end
+            end
         elseif input == "5" then
-            shell.run("clear")
+            input = ""
             print("===== LUNARCOMPILLER =====")
-            shell.run("[installer] installing: Engine Detector")
-            shell.run("pastebin get hL2ivUT8 startup")
-            shell.run("clear")
-            shell.run("installer")
+            sleep(0.1)
+            if fs.exists("startup") then
+                print("Program is already installed or another program is already installed")
+                print("[0] Return")
+				print("[1] Reinstall")
+                print("[2] Uninstall")
+                input = read()
+                if input == "0" then
+                    shell.run("clear")
+                    shell.run("installer")
+				elseif input == "1" then
+					shell.run("[installer] reinstalling: Engine Detector")
+					shell.run("rm startup")
+                    shell.run("wget startup")
+                    print("[installer] Successfully reinstalled! Returning in 5s...")
+                    sleep(5)
+                    shell.run("clear")
+                    shell.run("installer")
+
+                elseif input == "2" then
+					shell.run("[installer] uninstalling: Engine Detector")
+                    shell.run("rm startup")
+                    print("[installer] Successfully removed! Returning in 5s...")
+                    sleep(5)
+                    shell.run("clear")
+                    shell.run("installer")
+                else
+                    print("Unknown syntax: " .. input)
+                    sleep(2)
+                    shell.run("clear")
+                    print("===== LUNARCOMPILLER =====")
+                    print("Program is already installed or another program is already installed")
+                    print("[0] Return")
+                    print("[1] Reinstall")
+                    print("[2] Uninstall")
+                end
+            else
+				print("Program is not yet installed.")
+                print("[0] Install")
+                input = read()
+                if input == "0" then
+                    print("[installer] installing: Engine Detector")
+                    shell.run("wget  startup")
+                    if fs.exists("id.txt") then
+                    else
+                        local f = fs.open("id.txt", "w")
+                        f.write("")
+                        f.close()
+                    end
+					print("[installer] Successfully installed! Returning in 5s...")
+                    sleep(5)
+                    shell.run("clear")
+                    shell.run("installer")
+                else
+                    print("Unknown syntax: " .. input)
+                    sleep(2)
+                    shell.run("clear")
+                    print("===== LUNARCOMPILLER =====")
+                    print("[0] Install")
+                end
+            end
         elseif input == "6" then
-            shell.run("clear")
+            input = ""
             print("===== LUNARCOMPILLER =====")
-            shell.run("[installer] installing: Status Receiver")
-            shell.run("pastebin get id2qx8hi startup")
-            shell.run("clear")
-            shell.run("installer")
+            sleep(0.1)
+            if fs.exists("startup") then
+                print("Program is already installed or another program is already installed")
+                print("[0] Return")
+				print("[1] Reinstall")
+                print("[2] Uninstall")
+                input = read()
+                if input == "0" then
+                    shell.run("clear")
+                    shell.run("installer")
+				elseif input == "1" then
+					shell.run("[installer] reinstalling: Status Receiver")
+					shell.run("rm startup")
+                    shell.run("wget startup")
+                    print("[installer] Successfully reinstalled! Returning in 5s...")
+                    sleep(5)
+                    shell.run("clear")
+                    shell.run("installer")
+
+                elseif input == "2" then
+					shell.run("[installer] uninstalling: Status Receiver")
+                    shell.run("rm startup")
+                    print("[installer] Successfully removed! Returning in 5s...")
+                    sleep(5)
+                    shell.run("clear")
+                    shell.run("installer")
+                else
+                    print("Unknown syntax: " .. input)
+                    sleep(2)
+                    shell.run("clear")
+                    print("===== LUNARCOMPILLER =====")
+                    print("Program is already installed or another program is already installed")
+                    print("[0] Return")
+                    print("[1] Reinstall")
+                    print("[2] Uninstall")
+                end
+            else
+				print("Program is not yet installed.")
+                print("[0] Install")
+                input = read()
+                if input == "0" then
+                    print("[installer] installing: Status Receiver")
+                    shell.run("wget  startup")
+                    if fs.exists("id.txt") then
+                    else
+                        local f = fs.open("id.txt", "w")
+                        f.write("")
+                        f.close()
+                    end
+					print("[installer] Successfully installed! Returning in 5s...")
+                    sleep(5)
+                    shell.run("clear")
+                    shell.run("installer")
+                else
+                    print("Unknown syntax: " .. input)
+                    sleep(2)
+                    shell.run("clear")
+                    print("===== LUNARCOMPILLER =====")
+                    print("[0] Install")
+                end
+            end
         elseif input == "7" then
             print("[installer] exiting program... Goodbye!")
             sleep(3)

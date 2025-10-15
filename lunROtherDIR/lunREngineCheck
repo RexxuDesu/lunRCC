@@ -1,0 +1,32 @@
+--- engineChecker 1.1 ---
+rednet.open("top")
+local source = peripheral.wrap("bottom")
+local a = false
+local filePath = fs.open("id.txt", "r")
+local serverID = filePath.readLine()
+if serverID ~= nil and serverID:gsub("%s", "") ~= "" then
+else
+    filePath = fs.open("id.txt", "w")
+    io.write("Enter server ID: ")
+    local input = read()
+    filePath.write(input)
+	filePath = fs.open("id.txt", "r")
+	serverID = filePath.readLine()
+	serverID = tonumber(serverID)
+	filePath.close()
+end
+serverID = tonumber(serverID)
+while true do
+	local line = source.getLine(1)
+	if line then
+        local tr = line:match("^%s*(.-)%s*$")
+        if tr == "0su" and a == false then
+            rednet.send(serverID, "parse0")
+			a = true
+        elseif tr ~= "0su" and a == true then
+			rednet.send(serverID, "parse1")
+			a = false
+		end
+    end
+	sleep(0.1)
+end
