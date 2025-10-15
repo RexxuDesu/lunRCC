@@ -1,7 +1,7 @@
 local version = "InstallerOS v0.3"
 local versionFile = "version.txt"
 local versionFileID = ""
-local scriptLinkID = "https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/lunRCompiller"
+local scriptLinkID = "https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/lunRCompillerDIR/main"
 local filePath = fs.open("installedApps.txt", "r")
 shell.run("clear")
 print("===== LUNARCOMPILLER =====")
