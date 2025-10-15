@@ -17,10 +17,10 @@ print("[7] Exit")
 
 local function update()
     print("[installer] Checking for updates...")
-    local success, err = shell.run("pastebin get " .. versionLinkID .. " " .. versionFile)
+    local success, err = shell.run("wget " .. versionLinkID .. " " .. versionFile)
     if not success then
 		term.setTextColor(errorColor)
-        print("[installer] Failed to fetch version information from Pastebin:", err)
+        print("[installer] Failed to fetch version information from Github:", err)
 		term.setTextColor(colors.white)
     end
     if fs.exists(versionFile) then
