@@ -1,0 +1,2 @@
+Paste this on a computer to install the installer:
+wget https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/lunRCompillerDIR/main installer
