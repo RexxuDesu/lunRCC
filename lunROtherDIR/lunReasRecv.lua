@@ -1,4 +1,4 @@
---- lunReasRecv 1.0 ---
+.lua--- lunReasRecv 1.0 ---
 rednet.open("top")
 local state = true
 local filePath = fs.open("id.txt", "r")
