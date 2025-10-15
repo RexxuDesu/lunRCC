@@ -1,7 +1,7 @@
 local vers = "lunRServer Release 1.3"
 local versFile = "version.txt"
 local versLinkID = "https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/lunRServerDIR/version.txt"
-local scriptLinkID = "https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/lunRServerDIR/main"
+local scriptLinkID = "https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/lunRServerDIR/main.lua"
 local promptColor = colors.lime
 local errorColor = colors.red
 local successColor = colors.green

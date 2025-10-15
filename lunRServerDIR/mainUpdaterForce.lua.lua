@@ -1,5 +1,5 @@
 shell.run("clear")
-local scriptLinkID = "https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/lunRServerDIR/main"
+local scriptLinkID = "https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/lunRServerDIR/main.lua"
 local promptColor = colors.lime
 local errorColor = colors.red
 local successColor = colors.green

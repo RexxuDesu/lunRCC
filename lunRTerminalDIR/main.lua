@@ -2,7 +2,7 @@
 rednet.open("back")
 local version = "lunRTerminal Release 1.4.3"
 local versionLinkID = "https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/lunRTerminalDIR/version.txt"
-local scriptLinkID = "https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/lunRTerminalDIR/main"
+local scriptLinkID = "https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/lunRTerminalDIR/main.lua"
 local scriptBetaPastebinID = "4Un6bMrt"
 local versionFile = "version.txt"
 local promptColor = colors.lime
