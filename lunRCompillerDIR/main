@@ -1,6 +1,6 @@
-local version = "InstallerOS v0.3"
+.local version = "lunRCompiller beta 0.4"
 local versionFile = "version.txt"
-local versionFileID = ""
+local versionLinkID = "https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/lunRCompillerDIR/version.txt"
 local scriptLinkID = "https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/lunRCompillerDIR/main"
 local filePath = fs.open("installedApps.txt", "r")
 shell.run("clear")
@@ -17,7 +17,7 @@ print("[7] Exit")
 
 local function update()
     print("[installer] Checking for updates...")
-    local success, err = shell.run("pastebin get " .. versionFileID .. " " .. versionFile)
+    local success, err = shell.run("pastebin get " .. versionLinkID .. " " .. versionFile)
     if not success then
 		term.setTextColor(errorColor)
         print("[installer] Failed to fetch version information from Pastebin:", err)
