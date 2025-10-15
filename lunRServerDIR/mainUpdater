@@ -1,7 +1,7 @@
 local vers = "lunRServer Release 1.3"
 local versFile = "version.txt"
-local versID = "TU571RkM"
-local scriptID = "YhnjmQe6"
+local versLinkID = "https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/lunRServerDIR/version.txt"
+local scriptLinkID = "https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/lunRServerDIR/main"
 local promptColor = colors.lime
 local errorColor = colors.red
 local successColor = colors.green
@@ -9,7 +9,7 @@ local goldColor = colors.yellow
 local infoColor = colors.cyan
 
 print("Checking for updates...")
-local success, err = shell.run("pastebin get " .. versID .. " " .. versFile)
+local success, err = shell.run("wget " .. versLinkID .. " " .. versFile)
 
 if not success then
     term.setTextColor(errorColor)
@@ -38,7 +38,7 @@ if fs.exists(versFile) then
             if proceed:lower() == "y" then
                 print("[Software updating...")
                 shell.run("rm startup")
-                local success, err = shell.run("pastebin get " .. scriptID .. " startup")
+                local success, err = shell.run("wget " .. scriptLinkID .. " startup")
                 
                 if success then
                     vers = latestVersion

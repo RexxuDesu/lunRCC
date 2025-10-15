@@ -1,5 +1,5 @@
 shell.run("clear")
-local scriptID = "YhnjmQe6"
+local scriptLinkID = "https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/lunRServerDIR/main"
 local promptColor = colors.lime
 local errorColor = colors.red
 local successColor = colors.green
@@ -14,7 +14,7 @@ local proceed = read():lower()
 if proceed == "y" then
     print("Force updating...")
     shell.run("rm startup")
-    local success, err = shell.run("pastebin get " .. scriptID .. " startup")
+    local success, err = shell.run("pastebin get " .. scriptLinkID .. " startup")
 
     if success then
         term.setTextColor(successColor)
