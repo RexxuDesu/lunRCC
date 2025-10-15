@@ -258,10 +258,12 @@ while true do
             sleep(3)
             shell.run("exit")
         elseif input == "apt upd" then
+            print("===== LUNARCOMPILLER =====")
             print("[installer] updating...")
             sleep(3)
             update()
         elseif input == "apt -f upd" then
+            print("===== LUNARCOMPILLER =====")
             print("[installer] updating...")
             sleep(3)
             updateForce()
