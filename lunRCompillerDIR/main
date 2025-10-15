@@ -19,8 +19,8 @@ local function update()
     print("[installer] Checking for updates...")
     local success, err = shell.run("wget " .. versionLinkID .. " " .. versionFile)
     if not success then
-		term.setTextColor(errorColor)
-        print("[installer] Failed to fetch version information from Github:", err)
+		term.setTextColor(colors.red)
+        print("[installer] Failed to fetch version information from Pastebin:", err)
 		term.setTextColor(colors.white)
     end
     if fs.exists(versionFile) then
@@ -34,7 +34,7 @@ local function update()
             if latestVersion and latestVersion ~= version then
                 print("[installer] Latest version available: " .. latestVersion)
                 print("[installer] Current installed version: " .. version)
-				term.setTextColor(successColor)
+				term.setTextColor(colors.green)
                 io.write("[installer] Do you want to proceed with the update? (y/n): ")
 				term.setTextColor(colors.white)
                 local proceed = read()
@@ -44,28 +44,28 @@ local function update()
                     local success, err = shell.run("wget " .. scriptLinkID .. " installer")
                     if success then
                         version = latestVersion
-						term.setTextColor(successColor)
+						term.setTextColor(colors.green)
                         print("[installer] Script updated to version " .. latestVersion)
 						term.setTextColor(colors.white)
                         return
                         shell.run("installer")
                     else
-						term.setTextColor(errorColor)
+						term.setTextColor(colors.red)
                         print("[installer] Failed to update script:", err)
 						term.setTextColor(colors.white)
                     end
                 else
-					term.setTextColor(errorColor)
+					term.setTextColor(colors.red)
                     print("[installer] Update aborted.")
 					term.setTextColor(colors.white)
                 end
             else
-				term.setTextColor(successColor)
+				term.setTextColor(colors.green)
                 print("[installer] No updates available. You are running the latest version.")
 				term.setTextColor(colors.white)
             end
         else
-			term.setTextColor(errorColor)
+			term.setTextColor(colors.red)
             print("[installer] Failed to open version file for reading.")
 			term.setTextColor(colors.white)
         end
