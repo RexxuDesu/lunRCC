@@ -160,7 +160,7 @@ while true do
                     shell.run("installer")
 
                 elseif input == "2" then
-					shell.run("[installer] uninstalling: Lunar Software")
+					print("[installer] uninstalling: Lunar Software")
                     shell.run("rm startup")
                     print("[installer] Successfully removed! Returning in 5s...")
                     sleep(5)
@@ -208,7 +208,7 @@ while true do
                     shell.run("clear")
                     shell.run("installer")
 				elseif input == "1" then
-					shell.run("[installer] reinstalling: Lunar Server")
+					print("[installer] reinstalling: Lunar Server")
 					shell.run("rm startup")
 					if fs.exists("updater") then
 						shell.run("rm updater")
@@ -225,7 +225,7 @@ while true do
                     shell.run("installer")
 
                 elseif input == "2" then
-					shell.run("[installer] uninstalling: Lunar Server")
+					print("[installer] uninstalling: Lunar Server")
                     shell.run("rm startup")
 					if fs.exists("updater") then
 						shell.run("rm updater")
@@ -281,7 +281,7 @@ while true do
                     shell.run("clear")
                     shell.run("installer")
 				elseif input == "1" then
-					shell.run("[installer] reinstalling: Vault Reader")
+					print("[installer] reinstalling: Vault Reader")
 					shell.run("rm startup")
                     shell.run("wget startup")
                     print("[installer] Successfully reinstalled! Returning in 5s...")
@@ -290,7 +290,7 @@ while true do
                     shell.run("installer")
 
                 elseif input == "2" then
-					shell.run("[installer] uninstalling: Vault Reader")
+					print("[installer] uninstalling: Vault Reader")
                     shell.run("rm startup")
                     print("[installer] Successfully removed! Returning in 5s...")
                     sleep(5)
@@ -338,7 +338,7 @@ while true do
                     shell.run("clear")
                     shell.run("installer")
 				elseif input == "1" then
-					shell.run("[installer] reinstalling: Vault Detector")
+					print("[installer] reinstalling: Vault Detector")
 					shell.run("rm startup")
                     shell.run("wget startup")
                     print("[installer] Successfully reinstalled! Returning in 5s...")
@@ -347,7 +347,7 @@ while true do
                     shell.run("installer")
 
                 elseif input == "2" then
-					shell.run("[installer] uninstalling: Vault Detector")
+					print("[installer] uninstalling: Vault Detector")
                     shell.run("rm startup")
                     print("[installer] Successfully removed! Returning in 5s...")
                     sleep(5)
@@ -395,7 +395,7 @@ while true do
                     shell.run("clear")
                     shell.run("installer")
 				elseif input == "1" then
-					shell.run("[installer] reinstalling: EAS Receiver")
+					print("[installer] reinstalling: EAS Receiver")
 					shell.run("rm startup")
                     shell.run("wget https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/lunROtherDIR/lunReasRecv.lua startup")
                     print("[installer] Successfully reinstalled! Returning in 5s...")
@@ -404,7 +404,7 @@ while true do
                     shell.run("installer")
 
                 elseif input == "2" then
-					shell.run("[installer] uninstalling: EAS Receiver")
+					print("[installer] uninstalling: EAS Receiver")
                     shell.run("rm startup")
                     print("[installer] Successfully removed! Returning in 5s...")
                     sleep(5)
@@ -452,7 +452,7 @@ while true do
                     shell.run("clear")
                     shell.run("installer")
 				elseif input == "1" then
-					shell.run("[installer] reinstalling: Engine Detector")
+					print("[installer] reinstalling: Engine Detector")
 					shell.run("rm startup")
                     shell.run("wget https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/lunROtherDIR/lunREngineCheck.lua startup")
                     print("[installer] Successfully reinstalled! Returning in 5s...")
@@ -461,7 +461,7 @@ while true do
                     shell.run("installer")
 
                 elseif input == "2" then
-					shell.run("[installer] uninstalling: Engine Detector")
+					print("[installer] uninstalling: Engine Detector")
                     shell.run("rm startup")
                     print("[installer] Successfully removed! Returning in 5s...")
                     sleep(5)
@@ -509,7 +509,7 @@ while true do
                     shell.run("clear")
                     shell.run("installer")
 				elseif input == "1" then
-					shell.run("[installer] reinstalling: Status Receiver")
+					print("[installer] reinstalling: Status Receiver")
 					shell.run("rm startup")
                     shell.run("wget https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/lunROtherDIR/lunRCommandRecv.lua startup")
                     print("[installer] Successfully reinstalled! Returning in 5s...")
@@ -518,7 +518,7 @@ while true do
                     shell.run("installer")
 
                 elseif input == "2" then
-					shell.run("[installer] uninstalling: Status Receiver")
+					print("[installer] uninstalling: Status Receiver")
                     shell.run("rm startup")
                     print("[installer] Successfully removed! Returning in 5s...")
                     sleep(5)
