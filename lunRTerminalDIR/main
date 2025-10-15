@@ -1,6 +1,6 @@
---- lunRTerminal 1.4.3 ---
+--- lunRTerminal Release 1.4.3 ---
 rednet.open("back")
-local version = "lunRTerminal Build 1.4.3"
+local version = "lunRTerminal Release 1.4.3"
 local versionLinkID = "https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/lunRTerminalDIR/version.txt"
 local scriptLinkID = "https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/lunRTerminalDIR/main"
 local scriptBetaPastebinID = "4Un6bMrt"

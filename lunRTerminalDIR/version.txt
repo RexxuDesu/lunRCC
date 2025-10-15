@@ -1,1 +1,1 @@
-lunRTerminal Build 1.4.3
+lunRTerminal Release 1.4.3

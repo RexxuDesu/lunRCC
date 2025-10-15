@@ -1,4 +1,4 @@
-local version = "lunRCompiller beta 0.4.3"
+local version = "lunRCompiller Beta 0.4.3"
 local versionFile = "version.txt"
 local versionLinkID = "https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/lunRCompillerDIR/version.txt"
 local scriptLinkID = "https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/lunRCompillerDIR/main"
@@ -425,7 +425,7 @@ while true do
 				elseif input == "1" then
 					shell.run("[installer] reinstalling: EAS Receiver")
 					shell.run("rm startup")
-                    shell.run("wget startup")
+                    shell.run("wget https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/lunROtherDIR/lunReasRecv startup")
                     print("[installer] Successfully reinstalled! Returning in 5s...")
                     sleep(5)
                     shell.run("clear")
@@ -454,7 +454,7 @@ while true do
                 input = read()
                 if input == "0" then
                     print("[installer] installing: EAS Receiver")
-                    shell.run("wget  startup")
+                    shell.run("wget https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/lunROtherDIR/lunReasRecv startup")
                     if fs.exists("id.txt") then
                     else
                         local f = fs.open("id.txt", "w")
@@ -489,7 +489,7 @@ while true do
 				elseif input == "1" then
 					shell.run("[installer] reinstalling: Engine Detector")
 					shell.run("rm startup")
-                    shell.run("wget startup")
+                    shell.run("wget https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/lunROtherDIR/lunREngineCheck startup")
                     print("[installer] Successfully reinstalled! Returning in 5s...")
                     sleep(5)
                     shell.run("clear")
@@ -518,7 +518,7 @@ while true do
                 input = read()
                 if input == "0" then
                     print("[installer] installing: Engine Detector")
-                    shell.run("wget  startup")
+                    shell.run("wget https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/lunROtherDIR/lunREngineCheck startup")
                     if fs.exists("id.txt") then
                     else
                         local f = fs.open("id.txt", "w")
@@ -553,7 +553,7 @@ while true do
 				elseif input == "1" then
 					shell.run("[installer] reinstalling: Status Receiver")
 					shell.run("rm startup")
-                    shell.run("wget startup")
+                    shell.run("wget https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/lunROtherDIR/lunRCommandRecv startup")
                     print("[installer] Successfully reinstalled! Returning in 5s...")
                     sleep(5)
                     shell.run("clear")
@@ -582,7 +582,7 @@ while true do
                 input = read()
                 if input == "0" then
                     print("[installer] installing: Status Receiver")
-                    shell.run("wget  startup")
+                    shell.run("wget https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/lunROtherDIR/lunRCommandRecv startup")
                     if fs.exists("id.txt") then
                     else
                         local f = fs.open("id.txt", "w")

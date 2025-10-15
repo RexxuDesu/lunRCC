@@ -1,4 +1,4 @@
---- engineChecker 1.1 ---
+--- lunREngineCheck 1.1 ---
 rednet.open("top")
 local source = peripheral.wrap("bottom")
 local a = false
