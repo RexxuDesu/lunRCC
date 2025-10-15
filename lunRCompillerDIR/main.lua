@@ -3,7 +3,6 @@ local versionFile = "version.txt"
 local versionLinkID = "https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/lunRCompillerDIR/version.txt"
 local scriptLinkID = "https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/lunRCompillerDIR/main.lua"
 local filePath = fs.open("installedApps.txt", "r")
-pagePrint
 local function pagePrint()
     shell.run("clear")
     print("===== LUNARCOMPILLER =====")
@@ -17,6 +16,7 @@ local function pagePrint()
     print("[6] Status Receiver")
     print("[7] Exit")
 end
+pagePrint()
 local function update()
     print("[installer] Checking for updates...")
     local success, err = shell.run("wget " .. versionLinkID .. " " .. versionFile)
