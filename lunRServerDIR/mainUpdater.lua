@@ -1,4 +1,4 @@
-local vers = "lunRServer Release 1.3"
+local vers = "lunRServer Release 1.4"
 local versFile = "version.txt"
 local versLinkID = "https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/lunRServerDIR/version.txt"
 local scriptLinkID = "https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/lunRServerDIR/main.lua"

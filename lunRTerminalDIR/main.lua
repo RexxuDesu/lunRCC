@@ -1,6 +1,6 @@
---- lunRTerminal Release 1.4.3 ---
+--- lunRTerminal Release 1.4.4 ---
 rednet.open("back")
-local version = "lunRTerminal Release 1.4.3"
+local version = "lunRTerminal Release 1.4.4"
 local versionLinkID = "https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/lunRTerminalDIR/version.txt"
 local scriptLinkID = "https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/lunRTerminalDIR/main.lua"
 local scriptBetaPastebinID = "4Un6bMrt"
@@ -232,6 +232,8 @@ local function inputRead()
 			rednet.send(serverID, "s1")
 		elseif command == "s3" then
 			rednet.send(serverID, "s2")
+        elseif command == "up1" then
+            rednet.send(serverID, "up0")
 		elseif command == "status" then
 			rednet.send(serverID, "stat")
         else

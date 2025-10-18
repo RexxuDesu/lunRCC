@@ -1,6 +1,6 @@
---- lunRServer 1.3 ---
+--- lunRServer 1.4 ---
 rednet.open("top")
-local vers = "lunRServer Release 1.3"
+local vers = "lunRServer Release 1.4"
 local promptColor = colors.lime
 local errorColor = colors.red
 local successColor = colors.green
@@ -98,6 +98,8 @@ local function recvPacket()
                 rednet.send(21, "TOGGLE")
             elseif packet == "s2" then
                 rednet.send(22, "TOGGLE")
+            elseif packet == "up0" then
+                rednet.send(19, "TOGGLE")
             elseif packet == "stat" then
                 rednet.send(23, "status")
 				rednet.send(24, "status")
