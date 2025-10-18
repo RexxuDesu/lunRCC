@@ -1,6 +1,6 @@
---- lunRTerminal Release 1.4.4 ---
+--- lunRTerminal Release 1.4.5 ---
 rednet.open("back")
-local version = "lunRTerminal Release 1.4.4"
+local version = "lunRTerminal Release 1.4.5"
 local versionLinkID = "https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/lunRTerminalDIR/version.txt"
 local scriptLinkID = "https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/lunRTerminalDIR/main.lua"
 local scriptBetaPastebinID = "4Un6bMrt"
@@ -39,7 +39,7 @@ end
 
 local function update()
     print("[sudo] Checking for updates...")
-    local success, err = shell.run("pastebin get " .. versionLinkID .. " " .. versionFile)
+    local success, err = shell.run("wget " .. versionLinkID .. " " .. versionFile)
     if not success then
 		term.setTextColor(errorColor)
         print("[sudo] Failed to fetch version information from Pastebin:", err)
@@ -104,7 +104,7 @@ local function updateForce()
     if proceed == "y" then
         print("[sudo] Force updating...")
         shell.run("rm startup")
-        local success, err = shell.run("pastebin get " .. scriptLinkID .. " startup")
+        local success, err = shell.run("wget " .. scriptLinkID .. " startup")
         if success then
             term.setTextColor(successColor)
             print("[sudo] Force update successful.")
