@@ -1,6 +1,6 @@
---- lunRServer 1.4 ---
+--- lunRServer 1.5 ---
 rednet.open("top")
-local vers = "lunRServer Release 1.4"
+local vers = "lunRServer Release 1.5"
 local promptColor = colors.lime
 local errorColor = colors.red
 local successColor = colors.green
@@ -55,6 +55,8 @@ local function inpRead()
             shell.run("updaterForce")
         elseif inp == "apt -b upd" then
             shell.run("updaterBeta")
+        elseif inp == "id" then
+            shell.run(id)
         elseif inp == "restart" then
             shell.run("clear")
             return
