@@ -1,4 +1,4 @@
-.lua--- lunReasRecv 1.0 ---
+--- lunReasRecv 1.0 ---
 rednet.open("top")
 local state = true
 local filePath = fs.open("id.txt", "r")
@@ -23,4 +23,5 @@ while true do
             redstone.setOutput("back", state)
         end
     end
+
 end
