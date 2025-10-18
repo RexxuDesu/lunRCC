@@ -3,7 +3,12 @@ local function listen()
     while true do
         local targetID, targetMsg, targetProt = rednet.receive()
         if targetID then
-            textutils.slowPrint("ID: " .. targetID .. "   MSG: " .. targetMsg .. "   PRT: " .. targetProt)
+            print("")
+            textutils.slowPrint("ID: " .. targetID)
+            print("")
+            textutils.slowPrint("MSG: " .. targetMsg)
+            print("")
+            textutils.slowPrint("PRT: " .. targetProt)
         end
         sleep(1)
     end
