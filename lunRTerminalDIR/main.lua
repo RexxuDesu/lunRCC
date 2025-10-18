@@ -42,7 +42,7 @@ local function update()
     local success, err = shell.run("wget " .. versionLinkID .. " " .. versionFile)
     if not success then
 		term.setTextColor(errorColor)
-        print("[sudo] Failed to fetch version information from Pastebin:", err)
+        print("[sudo] Failed to fetch version information from Github:", err)
 		term.setTextColor(colors.white)
     end
     if fs.exists(versionFile) then
@@ -63,7 +63,7 @@ local function update()
                 if proceed:lower() == "y" then
                     print("[sudo] Updating...")
                     shell.run("rm startup")
-                    local success, err = shell.run("pastebin get " .. scriptLinkID .. " startup")
+                    local success, err = shell.run("wget " .. scriptLinkID .. " startup")
                     if success then
                         version = latestVersion
 						term.setTextColor(successColor)
@@ -131,7 +131,7 @@ local function betaUpdate()
     if proceed == "y" then
         print("[sudo] Force updating...")
         shell.run("rm startup")
-        local success, err = shell.run("pastebin get " .. scriptBetaPastebinID .. " startup")
+        local success, err = shell.run("wget " .. scriptBetaPastebinID .. " startup")
         if success then
             term.setTextColor(successColor)
             print("[sudo] Force update successful.")
