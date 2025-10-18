@@ -56,7 +56,7 @@ local function inpRead()
         elseif inp == "apt -b upd" then
             shell.run("updaterBeta")
         elseif inp == "id" then
-            shell.run(id)
+            print("Server ID is: #26")
         elseif inp == "restart" then
             shell.run("clear")
             return
