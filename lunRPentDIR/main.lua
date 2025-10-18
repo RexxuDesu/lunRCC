@@ -1,3 +1,4 @@
+shell.run("clear")
 textutils.slowPrint("Initializing...")
 local function listen()
     while true do
