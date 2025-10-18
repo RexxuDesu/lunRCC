@@ -1,6 +1,6 @@
---- lunRTerminal Release 1.4.5 ---
+--- lunRTerminal Release 1.4.6 ---
 rednet.open("back")
-local version = "lunRTerminal Release 1.4.5"
+local version = "lunRTerminal Release 1.4.6"
 local versionLinkID = "https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/lunRTerminalDIR/version.txt"
 local scriptLinkID = "https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/lunRTerminalDIR/main.lua"
 local scriptBetaPastebinID = "4Un6bMrt"
@@ -165,18 +165,16 @@ local function changeUser()
 end
 
 local function changeServer()
-    if serverID ~= nil and serverID:gsub("%s", "") ~= "" then
-        idPath = fs.open("id.txt", "w")
-        term.setTextColor(promptColor)
-        io.write("Enter new server ID: ")
-        term.setTextColor(colors.white)
-        local input = read()
-        idPath.write(input)
-        idPath = fs.open("id.txt", "r")
-        serverID = idPath.readLine()
-        serverID = tonumber(serverID)
-        idPath.close()
-    end
+    idPath = fs.open("id.txt", "w")
+    term.setTextColor(promptColor)
+    io.write("Enter new server ID: ")
+    term.setTextColor(colors.white)
+    local input = read()
+    idPath.write(input)
+    idPath = fs.open("id.txt", "r")
+    serverID = idPath.readLine()
+    serverID = tonumber(serverID)
+    idPath.close()
 end
 
 serverID = tonumber(serverID)
