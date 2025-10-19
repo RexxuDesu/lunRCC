@@ -134,7 +134,7 @@ local function updateForce()
     end
 end
 while true do
-    local input = read()
+    local input = read("")
     if input then
         shell.run("clear")
         if input == "0" then
