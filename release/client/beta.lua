@@ -100,7 +100,7 @@ local commands = {
     end,
     ["test"] = function()
         io.write(var.user .. "@:~$ Hello!\n")
-    end
+    end,
     ["inv"] = function()
         rednet.send(61, "1")
         term.setTextColor(colors.green)
