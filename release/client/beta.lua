@@ -22,7 +22,7 @@ local commands = {
             file.close()
         end
         local file = fs.open(path.user, "w")
-        io.write(var.user .. "@:~$ Enter new user: ")
+        io.write("Enter new user: ")
         local input = read()
         file.write(input)
         file.close()
@@ -37,7 +37,7 @@ local commands = {
         update()
     end,
     ["test"] = function()
-        io.write(var.user .. "@:~$ Hello!")
+        io.write(var.user .. "@:~$ Hello!\n")
     end
 }
 local function update()
