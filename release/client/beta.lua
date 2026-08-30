@@ -94,6 +94,14 @@ local commands = {
             end
         end
     end,
+    ["exit"] = function()
+        term.setTextColor(colors.yellow)
+        io.write("\n" .. var.user .. "@:~$ Goodbye!")
+        term.setTextColor(colors.white)
+        sleep(1.3)
+        shell.run("clear")
+        run = false
+    end,
     ["test"] = function()
         io.write(var.user .. "@:~$ Hello!\n")
     end
@@ -115,7 +123,7 @@ local function checkFiles()
 end
 checkFiles()
 while var.run do
-    io.write(var.user .. "@:~$ ")
+    io.write("\n" .. var.user .. "@:~$ ")
     local input = read()
     if commands[input] then
         commands[input]()
