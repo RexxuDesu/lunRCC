@@ -3,7 +3,7 @@ local var = {
     user = nil,
     userR,
     userW,
-    vers = 3.1,
+    vers = 3.2,
     run = true
 }
 local path = {
@@ -96,7 +96,7 @@ local commands = {
         term.setTextColor(colors.white)
         sleep(1.3)
         shell.run("clear")
-        run = false
+        var.run = false
     end,
     ["test"] = function()
         io.write(var.user .. "@:~$ Hello!\n")
@@ -115,6 +115,12 @@ local commands = {
     end,
     ["server"] = function()
         rednet.send(42, "1")
+        term.setTextColor(colors.green)
+        io.write(var.user .. "@:~$ Command sent!")
+        term.setTextColor(colors.white)
+    end,
+    ["gate"] = function()
+        rednet.send(66, "1")
         term.setTextColor(colors.green)
         io.write(var.user .. "@:~$ Command sent!")
         term.setTextColor(colors.white)
