@@ -1,6 +1,6 @@
 rednet.open(peripheral.getName(peripheral.find("modem")))
 local m = peripheral.find("monitor")
-m.setTextScale(2)
+m.setTextScale(1)
 local vaults = {
     [68] = "Woods",
     [69] = "Blocks",
@@ -12,6 +12,29 @@ local vaults = {
 }
 local order = {68, 69, 70, 71, 72, 73, 74}
 local data = {}
+local function loadData()
+    for _, id in ipairs(order) do
+        local filename = tostring(id) .. ".txt"
+        if fs.exists(filename) then
+            local file = fs.open(filename, "r")
+            local contents = file.readAll()
+            file.close()
+            local func = load("return " .. contents)
+            if func then
+                local success, result = pcall(func)
+                if success and type(result) == "table" then
+                    data[id] = result
+                end
+            end
+        end
+    end
+end
+local function saveData(id, message)
+    local filename = tostring(id) .. ".txt"
+    local file = fs.open(filename, "w")
+    file.write(textutils.serialize(message))
+    file.close()
+end
 local function display()
     m.clear()
     local line = 1
@@ -28,6 +51,7 @@ local function display()
             m.setCursorPos(1, line)
             local barWidth = 20
             local filled = math.floor(percent * barWidth)
+            filled = math.max(0, math.min(barWidth, filled))
             m.write("[")
             m.write(string.rep("#", filled))
             m.write(string.rep("-", barWidth - filled))
@@ -35,11 +59,16 @@ local function display()
         else
             m.write(name .. ": Waiting...")
         end
-        line = line + 2
+        line = line + 1
     end
 end
+loadData()
+display()
 while true do
     local senderID, message = rednet.receive("sensor")
-    data[senderID] = message
-    display()
+    if vaults[senderID] then
+        data[senderID] = message
+        saveData(senderID, message)
+        display()
+    end
 end
