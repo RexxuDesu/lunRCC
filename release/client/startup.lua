@@ -1,9 +1,12 @@
 rednet.open("back")
-local user
-local run = true
+local var = {
+    user,
+    userR,
+    userW,
+    run = true
+}
 local path = {
-    userR = fs.open("user.txt", "r"),
-    userW = fs.open("user.txt", "w")
+    user = ("user.txt")
 }
 local commands = {
     ["change user"] = function()
@@ -71,23 +74,23 @@ local commands = {
     end
 }
 if fs.exists("user.txt") then
-    user = path.userR.readLine()
-    path.userR.close()
-    if user == nil or user:gsub("%s", "") == "" then
-        path.userW.write("root")
-        path.userW.close()
-        user = path.userR.readLine()
-        path.userR.close()
-    else
-        user = path.userR.readLine()
-        path.userR.close()
+    var.userR = fs.open(path.user, "r")
+    var.user = var.userR.readLine()
+    var.userR.close()
+    if var.user == nil or var.user:gsub("%s", "") == "" then
+        var.userW = fs.open(path.user, "w")
+        var.userW.write("root")
+        var.userW.close()
+        var.userR = fs.open(path.user, "r")
+        var.user = var.userR.readLine()
+        var.userR.close()
     end
 end
 
 local function update()
 
 end
-while run do
+while var.run do
     io.write(user .. "@:~$ ")
     local input = read()
     if commands[input] then
