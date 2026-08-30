@@ -3,11 +3,11 @@ local var = {
     user = nil,
     userR,
     userW,
+    vers = 1,
     run = true
 }
 local path = {
     user = "user.txt",
-    curVers = "verion.txt",
     latVers = "versionLatest.txt"
 }
 local link = {
@@ -47,56 +47,54 @@ local commands = {
                 local latVers = file.readLine()
                 file.close()
                 fs.delete(path.latVers)
-                file = fs.open(path.curVers, "r")
-                local curVers = file.readLine()
-                file.close()
                 latVers = latVers:match("^%s*(.-)%s*$")
-                curVers = curVers:match("^%s*(.-)%s*$")
-                if latVers ~= curVers then
-                    print("Latest version available: " .. latVers .. ". Current version: " .. curVers)
+                var.vers = var.vers:match("^%s*(.-)%s*$")
+                if latVers ~= var.vers then
+                    io.write("Latest version available: " .. latVers .. ".\nCurrent version: " .. var.vers .. "\n")
                     term.setTextColor(colors.green)
                     io.write("Do you want to proceed with the update? (y/n): ")
                     term.setTextColor(colors.white)
                     local proceed = read()
+                    io.write("\n")
                     if proceed:lower() == "y" then
-                        io.write("Updating...")
+                        term.setTextColor(colors.green)
+                        io.write("Updating...\n")
+                        term.setTextColor(colors.white)
                         shell.run("rm startup")
                         local suc, err = shell.run("wget " .. link.update .. " startup")
                         if suc then
-                            file = fs.open(path.curVers, "w")
-                            file.write(latVers)
-                            file.close()
                             term.setTextColor(colors.green)
-                            print("Updated to version " .. latVers)
-                            term.setTextColor(colors.white)
+                            io.write("Updated to version " .. latVers .. "\n")
+                            term.setTextColor(colors.yellow)
                             io.write("Rebooting in 2s...")
+                            term.setTextColor(colors.white)
                             sleep(2)
                             os.reboot()
                         else
                             term.setTextColor(colors.red)
-                            print("Failed to update script: ", err)
+                            io.write("Failed to update script: ", err .. "\n")
                             term.setTextColor(colors.white)
                         end
                     else
                         term.setTextColor(colors.red)
-                        io.write("Update aborted.")
+                        io.write("Update aborted.\n")
                         term.setTextColor(colors.white)
                     end
                 else
                     term.setTextColor(colors.green)
-                    io.write("No current updates available.")
+                    io.write("No current updates available.\n")
                     term.setTextColor(colors.white)
                 end
             else
                 term.setTextColor(colors.red)
-                print("Failed to read file.")
+                io.write("Failed to read file.\n")
                 term.setTextColor(colors.white)
             end
         end
     end,
     ["exit"] = function()
         term.setTextColor(colors.yellow)
-        io.write("\n" .. var.user .. "@:~$ Goodbye!")
+        io.write(var.user .. "@:~$ Goodbye!\n")
         term.setTextColor(colors.white)
         sleep(1.3)
         shell.run("clear")
@@ -107,11 +105,6 @@ local commands = {
     end
 }
 local function checkFiles()
-    if not fs.exists(path.curVers) then
-        local file = fs.open(path.curVers, "w")
-        file.write("1")
-        file.close()
-    end
     if not fs.exists(path.user) then
         local file = fs.open(path.user, "w")
         file.write("root")
@@ -123,7 +116,7 @@ local function checkFiles()
 end
 checkFiles()
 while var.run do
-    io.write("\n" .. var.user .. "@:~$ ")
+    io.write(var.user .. "@:~$ ")
     local input = read()
     if commands[input] then
         commands[input]()
