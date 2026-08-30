@@ -1,4 +1,4 @@
-rednet.open("top")
+rednet.open(peripheral.getName(peripheral.find("modem")))
 local sender = 7
 local signal = "front"
 while true do

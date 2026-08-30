@@ -1,4 +1,4 @@
-rednet.open("top")
+rednet.open(peripheral.getName(peripheral.find("modem")))
 local var = {
     v = peripheral.find("inventory"),
     capacity = 0,

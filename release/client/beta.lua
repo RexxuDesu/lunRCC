@@ -1,9 +1,9 @@
-rednet.open("back")
+rednet.open(peripheral.getName(peripheral.find("modem")))
 local var = {
     user = nil,
     userR,
     userW,
-    vers = 3.2,
+    vers = 3.2.0.1,
     run = true
 }
 local path = {
@@ -100,12 +100,6 @@ local commands = {
     end,
     ["test"] = function()
         io.write(var.user .. "@:~$ Hello!\n")
-    end,
-    ["inv"] = function()
-        rednet.send(61, "1")
-        term.setTextColor(colors.green)
-        io.write(var.user .. "@:~$ Command sent!")
-        term.setTextColor(colors.white)
     end,
     ["craft"] = function()
         rednet.send(60, "1")

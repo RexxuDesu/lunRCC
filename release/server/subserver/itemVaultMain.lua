@@ -1,4 +1,4 @@
-rednet.open("front")
+rednet.open(peripheral.getName(peripheral.find("modem")))
 local m = peripheral.find("monitor")
 m.setTextScale(2)
 local vaults = {
