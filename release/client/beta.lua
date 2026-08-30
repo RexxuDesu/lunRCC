@@ -3,7 +3,7 @@ local var = {
     user = nil,
     userR,
     userW,
-    vers = 3,
+    vers = 3.1,
     run = true
 }
 local path = {
