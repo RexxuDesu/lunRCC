@@ -44,11 +44,9 @@ local commands = {
         if fs.exists(path.latVers) then
             local file = fs.open(path.latVers, "r")
             if file then
-                local latVers = file.readLine()
+                local latVers = tonumber(file.readLine())
                 file.close()
                 fs.delete(path.latVers)
-                latVers = latVers:match("^%s*(.-)%s*$")
-                var.vers = var.vers:match("^%s*(.-)%s*$")
                 if latVers ~= var.vers then
                     io.write("Latest version available: " .. latVers .. ".\nCurrent version: " .. var.vers .. "\n")
                     term.setTextColor(colors.green)
@@ -102,6 +100,48 @@ local commands = {
     end,
     ["test"] = function()
         io.write(var.user .. "@:~$ Hello!\n")
+    end
+    ["inv"] = function()
+        rednet.send(61, "1")
+        term.setTextColor(colors.green)
+        io.write(var.user .. "@:~$ Command sent!")
+        term.setTextColor(colors.white)
+    end,
+    ["craft"] = function()
+        rednet.send(60, "1")
+        term.setTextColor(colors.green)
+        io.write(var.user .. "@:~$ Command sent!")
+        term.setTextColor(colors.white)
+    end,
+    ["server"] = function()
+        rednet.send(42, "1")
+        term.setTextColor(colors.green)
+        io.write(var.user .. "@:~$ Command sent!")
+        term.setTextColor(colors.white)
+    end,
+    ["e1"] = function()
+        rednet.send(65, "1")
+        term.setTextColor(colors.green)
+        io.write(var.user .. "@:~$ Command sent!")
+        term.setTextColor(colors.white)
+    end,
+    ["e2"] = function()
+        rednet.send(64, "1")
+        term.setTextColor(colors.green)
+        io.write(var.user .. "@:~$ Command sent!")
+        term.setTextColor(colors.white)
+    end,
+    ["e3"] = function()
+        rednet.send(63, "1")
+        term.setTextColor(colors.green)
+        io.write(var.user .. "@:~$ Command sent!")
+        term.setTextColor(colors.white)
+    end,
+    ["e4"] = function()
+        rednet.send(62, "1")
+        term.setTextColor(colors.green)
+        io.write(var.user .. "@:~$ Command sent!")
+        term.setTextColor(colors.white)
     end
 }
 local function checkFiles()
