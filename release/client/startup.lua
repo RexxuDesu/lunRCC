@@ -1,11 +1,12 @@
 rednet.open("back")
+local user
+local run = true
 local path = {
     userR = fs.open("user.txt", "r"),
     userW = fs.open("user.txt", "w")
 }
-local run = true
 local commands = {
-    ["change user"] function()
+    ["change user"] = function()
         if user ~= nil and user:gsub("%s", "") ~= "" then
             term.setTextColor(colors.white)
             io.write(user .. "@:~$ Enter new username: ")
@@ -69,15 +70,20 @@ local commands = {
         term.setTextColor(colors.white)
     end
 }
-if user == nil and user:gsub("%s", "") == "" then
-    path.userW.write("root")
-    path.userW.close()
+if fs.exists("user.txt") then
     user = path.userR.readLine()
     path.userR.close()
-else
-    local user = path.userR.readLine()
-    path.userR.close()
+    if user == nil or user:gsub("%s", "") == "" then
+        path.userW.write("root")
+        path.userW.close()
+        user = path.userR.readLine()
+        path.userR.close()
+    else
+        user = path.userR.readLine()
+        path.userR.close()
+    end
 end
+
 local function update()
 
 end
