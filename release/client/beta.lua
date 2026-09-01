@@ -3,7 +3,7 @@ local var = {
     user = nil,
     userR,
     userW,
-    vers = 3.2.1.1,
+    vers = "3.2.1.2",
     run = true
 }
 local path = {
@@ -49,6 +49,8 @@ local commands = {
                 local latVers = file.readLine()
                 file.close()
                 fs.delete(path.latVers)
+                latVers = latVers:match("^%s*(.-)%s*$")
+                var.vers = var.vers:match("^%s*(.-)%s*$")
                 if latVers ~= var.vers then
                     io.write("Latest version available: " .. latVers .. ".\nCurrent version: " .. var.vers .. "\n")
                     term.setTextColor(colors.green)
@@ -74,22 +76,45 @@ local commands = {
                             term.setTextColor(colors.red)
                             io.write("Failed to update script: ", err .. "\n")
                             term.setTextColor(colors.white)
+                            return false
                         end
                     else
                         term.setTextColor(colors.red)
                         io.write("Update aborted.\n")
                         term.setTextColor(colors.white)
+                        return false
                     end
                 else
                     term.setTextColor(colors.green)
                     io.write("No current updates available.\n")
                     term.setTextColor(colors.white)
+                    return true
                 end
             else
                 term.setTextColor(colors.red)
                 io.write("Failed to read file.\n")
                 term.setTextColor(colors.white)
+                return false
             end
+        end
+    end,
+    ["update -f"] = function()
+        term.setTextColor(colors.green)
+        io.write("Force updating...\n")
+        term.setTextColor(colors.white)
+        shell.run("rm startup")
+        local suc, err = shell.run("wget " .. link.update .. " startup")
+        if suc then
+            term.setTextColor(colors.yellow)
+            io.write("Rebooting in 2s...")
+            term.setTextColor(colors.white)
+            sleep(2)
+            os.reboot()
+        else
+            term.setTextColor(colors.red)
+            io.write("Failed to update script: ", err .. "\n")
+            term.setTextColor(colors.white)
+            return false
         end
     end,
     ["exit"] = function()
