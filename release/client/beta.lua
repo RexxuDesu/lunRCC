@@ -3,7 +3,7 @@ local var = {
     user = nil,
     userR,
     userW,
-    vers = 3.2.0.1,
+    vers = 3.2.1.1,
     run = true
 }
 local path = {
@@ -29,9 +29,11 @@ local commands = {
         file = fs.open(path.user, "r")
         var.user = file.readLine()
         file.close()
+        return true
     end,
     ["clear"] = function()
         shell.run("clear")
+        return true
     end,
     ["update"] = function()
         io.write("Checking for updates...")
@@ -44,7 +46,7 @@ local commands = {
         if fs.exists(path.latVers) then
             local file = fs.open(path.latVers, "r")
             if file then
-                local latVers = tonumber(file.readLine())
+                local latVers = file.readLine()
                 file.close()
                 fs.delete(path.latVers)
                 if latVers ~= var.vers then
@@ -97,51 +99,56 @@ local commands = {
         sleep(1.3)
         shell.run("clear")
         var.run = false
-    end,
-    ["test"] = function()
-        io.write(var.user .. "@:~$ Hello!\n")
+        return true
     end,
     ["craft"] = function()
         rednet.send(60, "1")
         term.setTextColor(colors.green)
         io.write(var.user .. "@:~$ Command sent!")
         term.setTextColor(colors.white)
+        return true
     end,
     ["server"] = function()
         rednet.send(42, "1")
         term.setTextColor(colors.green)
         io.write(var.user .. "@:~$ Command sent!")
         term.setTextColor(colors.white)
+        return true
     end,
     ["gate"] = function()
         rednet.send(66, "1")
         term.setTextColor(colors.green)
         io.write(var.user .. "@:~$ Command sent!")
         term.setTextColor(colors.white)
+        return true
     end,
     ["e1"] = function()
         rednet.send(65, "1")
         term.setTextColor(colors.green)
         io.write(var.user .. "@:~$ Command sent!")
         term.setTextColor(colors.white)
+        return true
     end,
     ["e2"] = function()
         rednet.send(64, "1")
         term.setTextColor(colors.green)
         io.write(var.user .. "@:~$ Command sent!")
         term.setTextColor(colors.white)
+        return true
     end,
     ["e3"] = function()
         rednet.send(63, "1")
         term.setTextColor(colors.green)
         io.write(var.user .. "@:~$ Command sent!")
         term.setTextColor(colors.white)
+        return true
     end,
     ["e4"] = function()
         rednet.send(62, "1")
         term.setTextColor(colors.green)
         io.write(var.user .. "@:~$ Command sent!")
         term.setTextColor(colors.white)
+        return true
     end
 }
 local function checkFiles()
@@ -158,11 +165,23 @@ checkFiles()
 while var.run do
     io.write(var.user .. "@:~$ ")
     local input = read()
-    if commands[input] then
-        commands[input]()
-    else
-        term.setTextColor(colors.red)
-        io.write("Unknown command: " .. input)
-        term.setTextColor(colors.white)
+    local parts = {}
+    for command in string.gmatch(input, "[^&]+") do
+        table.insert(parts, command)
+    end
+    local suc = true
+    for _, command in ipairs(parts) do
+        command = command:gsub("^%s+", ""):gsub("%s+$", "")
+
+        if success then
+            if commands[command] then
+                suc = commands[command]()
+            else
+                term.setTextColor(colors.red)
+                io.write("Unknown command: " .. command .. "\n")
+                term.setTextColor(colors.white)
+                suc = false
+            end
+        end
     end
 end
