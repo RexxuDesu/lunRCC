@@ -3,7 +3,7 @@ local var = {
     user = nil,
     userR,
     userW,
-    vers = "3.2.1.2",
+    vers = "3.2.1.3",
     run = true
 }
 local path = {
@@ -197,8 +197,7 @@ while var.run do
     local suc = true
     for _, command in ipairs(parts) do
         command = command:gsub("^%s+", ""):gsub("%s+$", "")
-
-        if success then
+        if suc then
             if commands[command] then
                 suc = commands[command]()
             else
