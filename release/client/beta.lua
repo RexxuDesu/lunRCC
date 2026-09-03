@@ -274,21 +274,11 @@ local commands = {
                 local h = math.floor(total / 3600)
                 local m = math.floor((total % 3600) / 60)
                 local s = total % 60
-                local time = os.epoch("utc")
-                local timeEnd = time + (total * 1000)
                 io.write(string.format(
                     "[Fuel] Time left: %02d:%02d:%02d\n",
                     h,
                     m,
                     s
-                ))
-                local endSec = math.floor(timeEnd / 1000)
-                local date = os.date("*t", endSec)
-                io.write(string.format(
-                    "[Fuel] Runs out at: %02d:%02d:%02d\n",
-                    date.hour,
-                    date.min,
-                    date.sec
                 ))
             end
         else
