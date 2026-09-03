@@ -3,7 +3,7 @@ local var = {
     user = nil,
     userR,
     userW,
-    vers = "3.2.1.3",
+    vers = "3.2.2.1",
     run = true
 }
 local path = {
@@ -248,6 +248,35 @@ local commands = {
         io.write(var.user .. "@:~$ Command sent!")
         term.setTextColor(colors.white)
         return true
+    end,
+    ["fuel"] = function(args)
+        local give = false
+        local status = false
+        for _, arg in ipairs(args) do
+            if arg == "-g" then
+                give = true
+            elseif arg == "-s" then
+                status = true
+            else
+                term.setTextColor(colors.red)
+                io.write("Unknown option: " .. arg)
+                term.setTextColor(colors.white)
+                return false
+            end
+        end
+        if give then
+            rednet.send(x, "give")
+        elseif status then
+            rednet.send(x, "status")
+            await local ID, packet = rednet.receive()
+            if ID == x then
+               io.write("[Fuel] Minutes left: " .. packet / 60) 
+            end
+        else
+            term.setTextColor(colors.red)
+            io.write("Syntax cannot be empty.")
+            term.setTextColor(colors.white)
+        end
     end
 }
 local function checkFiles()
