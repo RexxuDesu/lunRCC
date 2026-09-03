@@ -265,11 +265,11 @@ local commands = {
             end
         end
         if give then
-            rednet.send(x, "give")
+            rednet.send(78, "give")
         elseif status then
-            rednet.send(x, "status")
+            rednet.send(78, "status")
             local ID, packet = rednet.receive()
-            if ID == x then
+            if ID == 78 then
                io.write("[Fuel] Minutes left: " .. packet / 60) 
             end
         else
