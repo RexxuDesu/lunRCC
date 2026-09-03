@@ -16,7 +16,7 @@ while true do
     if redstone.getInput("top") == true then
         if val == 0 then
             val = 18432
-        else val > 0 then
+        elseif val > 0 then
             val = val + 18432
         end
         file = fs.open("time.txt", "w")
