@@ -3,7 +3,7 @@ local var = {
     user = nil,
     userR,
     userW,
-    vers = "3.2.2.3",
+    vers = "3.2.2.4",
     run = true
 }
 local path = {
@@ -293,10 +293,10 @@ local commands = {
             end
         else
             term.setTextColor(colors.red)
-            io.write("Syntax cannot be empty.")
-            io.write("usage: fuel -g | -s")
-            io.write("usage: -g | gives 64 nuclear fuel to the reactor")
-            io.write("usage: -s | checks nuclear fuel time remainder")
+            io.write("Syntax cannot be empty.\n")
+            io.write("usage: fuel -g | -s\n")
+            io.write("usage: -g | gives 64 nuclear fuel to the reactor\n")
+            io.write("usage: -s | checks nuclear fuel time remainder\n")
             term.setTextColor(colors.white)
         end
     end
