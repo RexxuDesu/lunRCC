@@ -270,7 +270,7 @@ local commands = {
             rednet.send(78, "status")
             local ID, packet = rednet.receive()
             if ID == 78 then
-               io.write("[Fuel] Minutes left: " .. packet / 60) 
+               io.write("[Fuel] Minutes left: " .. packet / 60 .. "\n") 
             end
         else
             term.setTextColor(colors.red)
