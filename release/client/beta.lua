@@ -3,7 +3,7 @@ local var = {
     user = nil,
     userR,
     userW,
-    vers = "3.2.2.1",
+    vers = "3.2.2.2",
     run = true
 }
 local path = {
@@ -268,7 +268,7 @@ local commands = {
             rednet.send(x, "give")
         elseif status then
             rednet.send(x, "status")
-            await local ID, packet = rednet.receive()
+            local ID, packet = rednet.receive()
             if ID == x then
                io.write("[Fuel] Minutes left: " .. packet / 60) 
             end
