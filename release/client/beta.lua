@@ -3,7 +3,7 @@ local var = {
     user = nil,
     userR,
     userW,
-    vers = "3.2.2.2",
+    vers = "3.2.2.3",
     run = true
 }
 local path = {
@@ -270,11 +270,33 @@ local commands = {
             rednet.send(78, "status")
             local ID, packet = rednet.receive()
             if ID == 78 then
-               io.write("[Fuel] Minutes left: " .. packet / 60 .. "\n") 
+                local total = math.floor(packet)
+                local h = math.floor(total / 3600)
+                local m = math.floor((total % 3600) / 60)
+                local s = total % 60
+                local time = os.epoch("utc")
+                local timeEnd = time + (total * 1000)
+                io.write(string.format(
+                    "[Fuel] Time left: %02d:%02d:%02d\n",
+                    h,
+                    m,
+                    s
+                ))
+                local endSec = math.floor(timeEnd / 1000)
+                local date = os.date("*t", endSec)
+                io.write(string.format(
+                    "[Fuel] Runs out at: %02d:%02d:%02d\n",
+                    date.hour,
+                    date.min,
+                    date.sec
+                ))
             end
         else
             term.setTextColor(colors.red)
             io.write("Syntax cannot be empty.")
+            io.write("usage: fuel -g | -s")
+            io.write("usage: -g | gives 64 nuclear fuel to the reactor")
+            io.write("usage: -s | checks nuclear fuel time remainder")
             term.setTextColor(colors.white)
         end
     end
