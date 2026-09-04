@@ -3,7 +3,7 @@ local var = {
     user = nil,
     userR,
     userW,
-    vers = "3.2.2.4",
+    vers = "3.2.3.1",
     run = true
 }
 local path = {
@@ -50,48 +50,47 @@ local commands = {
                 return false
             end
         end
-        if force then
-            term.setTextColor(colors.green)
-            io.write("Force updating...\n")
+        io.write("Checking for updates...")
+        local suc, err = shell.run("wget " .. link.vers .. " " .. path.latVers)
+        if not suc then
+            term.setTextColor(colors.red)
+            print("Failed to fetch version info ", tostring(err))
             term.setTextColor(colors.white)
-            shell.run("rm startup")
-            local suc, err = shell.run("wget " .. link.update .. " startup")
-            if suc then
-                term.setTextColor(colors.yellow)
-                io.write("Rebooting in 2s...")
-                term.setTextColor(colors.white)
-                sleep(2)
-                os.reboot()
-            else
-                term.setTextColor(colors.red)
-                io.write("Failed to update script: ", err .. "\n")
-                term.setTextColor(colors.white)
-                return false
-            end
-        else
-            io.write("Checking for updates...")
-            local suc, err = shell.run("wget " .. link.vers .. " " .. path.latVers)
-            if not suc then
-                term.setTextColor(colors.red)
-                print("Failed to fetch version info ", err)
-                term.setTextColor(colors.white)
-            end
-            if fs.exists(path.latVers) then
-                local file = fs.open(path.latVers, "r")
-                if file then
-                    local latVers = file.readLine()
-                    file.close()
-                    fs.delete(path.latVers)
-                    latVers = latVers:match("^%s*(.-)%s*$")
-                    var.vers = var.vers:match("^%s*(.-)%s*$")
-                    if latVers ~= var.vers then
-                        io.write("Latest version available: " .. latVers .. ".\nCurrent version: " .. var.vers .. "\n")
+            return false
+        end
+        if fs.exists(path.latVers) then
+            local file = fs.open(path.latVers, "r")
+            if file then
+                local latVers = file.readLine()
+                file.close()
+                fs.delete(path.latVers)
+                latVers = latVers:match("^%s*(.-)%s*$")
+                var.vers = var.vers:match("^%s*(.-)%s*$")
+                if latVers ~= var.vers then
+                    io.write("Latest version available: " .. latVers .. ".\nCurrent version: " .. var.vers .. "\n")
+                    if force then
+                        term.setTextColor(colors.red)
+                        io.write("Force updating...\n")
+                        term.setTextColor(colors.white)
+                        shell.run("rm startup")
+                        local suc, err = shell.run("wget " .. link.update .. " startup")
+                        if suc then
+                            term.setTextColor(colors.green)
+                            io.write("Updated to version " .. latVers .. "\n")
+                            term.setTextColor(colors.yellow)
+                            io.write("Rebooting in 2s...")
+                            term.setTextColor(colors.white)
+                            sleep(2)
+                            os.reboot()
+                        else
+                            term.setTextColor(colors.red)
+                            io.write("Failed to update script: ", tostring(err) .. "\n")
+                            term.setTextColor(colors.white)
+                            return false
+                        end
+                    elseif yes then
                         term.setTextColor(colors.green)
                         io.write("Do you want to proceed with the update? (y/n): ")
-                        term.setTextColor(colors.white)
-                        local proceed = read()
-                        io.write("\n")
-                        term.setTextColor(colors.green)
                         io.write("Updating...\n")
                         term.setTextColor(colors.white)
                         shell.run("rm startup")
@@ -106,45 +105,11 @@ local commands = {
                             os.reboot()
                         else
                             term.setTextColor(colors.red)
-                            io.write("Failed to update script: ", err .. "\n")
+                            io.write("Failed to update script: ", tostring(err) .. "\n")
                             term.setTextColor(colors.white)
                             return false
                         end
-                        term.setTextColor(colors.red)
-                        io.write("Update aborted.\n")
-                        term.setTextColor(colors.white)
                     else
-                        term.setTextColor(colors.green)
-                        io.write("No current updates available.\n")
-                        term.setTextColor(colors.white)
-                        return true
-                    end
-                else
-                    term.setTextColor(colors.red)
-                    io.write("Failed to read file.\n")
-                    term.setTextColor(colors.white)
-                    return false
-                end
-            end
-        end
-        if not yes then
-            io.write("Checking for updates...")
-            local suc, err = shell.run("wget " .. link.vers .. " " .. path.latVers)
-            if not suc then
-                term.setTextColor(colors.red)
-                print("Failed to fetch version info ", err)
-                term.setTextColor(colors.white)
-            end
-            if fs.exists(path.latVers) then
-                local file = fs.open(path.latVers, "r")
-                if file then
-                    local latVers = file.readLine()
-                    file.close()
-                    fs.delete(path.latVers)
-                    latVers = latVers:match("^%s*(.-)%s*$")
-                    var.vers = var.vers:match("^%s*(.-)%s*$")
-                    if latVers ~= var.vers then
-                        io.write("Latest version available: " .. latVers .. ".\nCurrent version: " .. var.vers .. "\n")
                         term.setTextColor(colors.green)
                         io.write("Do you want to proceed with the update? (y/n): ")
                         term.setTextColor(colors.white)
@@ -166,7 +131,7 @@ local commands = {
                                 os.reboot()
                             else
                                 term.setTextColor(colors.red)
-                                io.write("Failed to update script: ", err .. "\n")
+                                io.write("Failed to update script: ", tostring(err) .. "\n")
                                 term.setTextColor(colors.white)
                                 return false
                             end
@@ -176,18 +141,18 @@ local commands = {
                             term.setTextColor(colors.white)
                             return false
                         end
-                    else
-                        term.setTextColor(colors.green)
-                        io.write("No current updates available.\n")
-                        term.setTextColor(colors.white)
-                        return true
                     end
                 else
-                    term.setTextColor(colors.red)
-                    io.write("Failed to read file.\n")
+                    term.setTextColor(colors.green)
+                    io.write("No current updates available.\n")
                     term.setTextColor(colors.white)
-                    return false
+                    return true
                 end
+            else
+                term.setTextColor(colors.red)
+                io.write("Failed to read file.\n")
+                term.setTextColor(colors.white)
+                return false
             end
         end
     end,
