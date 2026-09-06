@@ -3,7 +3,7 @@ local var = {
     user = nil,
     userR,
     userW,
-    vers = "3.2.3.1",
+    vers = "3.2.3.2",
     run = true
 }
 local path = {
@@ -15,6 +15,8 @@ local link = {
     update = "https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/release/client/beta.lua"
 }
 local commands = {
+    ["help"] = function() io.write("Available commands: help | version | change user | clear | update | exit | craft | server | gate | e1 | e2 | e3 | e4 | fuel\n") end,
+    ["version"] = function() io.write("Current running version: " .. var.vers .. "\n") end,
     ["change user"] = function()
         if not fs.exists(path.user) then
             local file = fs.open(path.user, "w")
@@ -39,10 +41,8 @@ local commands = {
         local force = false
         local yes = false
         for _, arg in ipairs(args) do
-            if arg == "-f" then
-                force = true
-            elseif arg == "-y" then
-                yes = true
+            if arg == "-f" then force = true
+            elseif arg == "-y" then yes = true
             else
                 term.setTextColor(colors.red)
                 print("Unknown option: " .. arg)
@@ -218,10 +218,8 @@ local commands = {
         local give = false
         local status = false
         for _, arg in ipairs(args) do
-            if arg == "-g" then
-                give = true
-            elseif arg == "-s" then
-                status = true
+            if arg == "-g" then give = true
+            elseif arg == "-s" then status = true
             else
                 term.setTextColor(colors.red)
                 io.write("Unknown option: " .. arg)
@@ -229,8 +227,7 @@ local commands = {
                 return false
             end
         end
-        if give then
-            rednet.send(78, "give")
+        if give then rednet.send(78, "give")
         elseif status then
             rednet.send(78, "status")
             local ID, packet = rednet.receive()
@@ -268,9 +265,7 @@ local function checkFiles()
 end
 local function parseCommand(input)
     local args = {}
-    for word in string.gmatch(input, "%S+") do
-        table.insert(args, word)
-    end
+    for word in string.gmatch(input, "%S+") do table.insert(args, word) end
     local command = table.remove(args, 1)
     return command, args
 end
@@ -280,9 +275,7 @@ while var.run do
     io.write(var.user .. "@:~$ ")
     local input = read()
     local parts = {}
-    for command in string.gmatch(input, "[^&]+") do
-        table.insert(parts, command)
-    end
+    for command in string.gmatch(input, "[^&]+") do table.insert(parts, command) end
     local success = true
     for _, commandInput in ipairs(parts) do
         commandInput = commandInput:gsub("^%s+", ""):gsub("%s+$", "")
@@ -290,9 +283,7 @@ while var.run do
             local command, args = parseCommand(commandInput)
             if commands[command] then
                 success = commands[command](args)
-                if success == nil then
-                    success = true
-                end
+                if success == nil then success = true end
             else
                 term.setTextColor(colors.red)
                 io.write("Unknown command: " .. command .. "\n")
