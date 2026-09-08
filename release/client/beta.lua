@@ -18,6 +18,7 @@ local link = {
 local commands = {
     ["help"] = function() io.write("Available commands: help | version | change user | clear | update | exit | craft | server | gate | e1 | e2 | e3 | e4 | fuel\n") end,
     ["version"] = function() io.write("Current running version: " .. var.vers .. "\n") end,
+    ["id"] = function() shell.run("id") end,
     ["change user"] = function()
         if not fs.exists(path.user) then
             local file = fs.open(path.user, "w")
@@ -252,10 +253,10 @@ end
 local function scriptFetch()
     while var.run do
         local ID, packet = rednet.receive()
-        if type(packet) == table and packet.action == "fetch" then
+        if type(packet) == "table" and packet.action == "fetch" then
             local file = packet.script
             if fs.exists("scripts/" .. file) and not fs.isDir(file) then
-                local localFile = io.open(file, "r")
+                local localFile = io.open(("scripts/" .. file), "r")
                 local content = localFile:read("*a")
                 localFile:close()
                 rednet.send(ID, content)
