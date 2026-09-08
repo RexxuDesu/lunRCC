@@ -42,15 +42,24 @@ local commands = {
     ["update"] = function(args)
         local force = false
         local yes = false
+        local script = false
         for _, arg in ipairs(args) do
             if arg == "-f" then force = true
             elseif arg == "-y" then yes = true
+            elseif arg == "-s" then script = true
             else
                 term.setTextColor(colors.red)
                 print("Unknown option: " .. arg)
                 term.setTextColor(colors.white)
                 return false
             end
+        end
+        if script then
+            shell.run("rm scripts/client")
+            shell.run("rm scripts/rednetReceiver")
+            if not fs.exists("scripts/client.lua") then shell.run("wget https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/release/client/beta.lua scripts/client") end
+            if not fs.exists("scripts/rukeiSubServer.lua") then shell.run("wget https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/release/server/subserver/rednetReceiver.lua scripts/rukeiSubServer") end
+            return true
         end
         if force then
             term.setTextColor(colors.red)
@@ -234,6 +243,7 @@ local function checkFiles()
         if not fs.exists("scripts/client.lua") then shell.run("wget https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/release/client/beta.lua scripts/client") end
         if not fs.exists("scripts/rukeiSubServer.lua") then shell.run("wget https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/release/server/subserver/rednetReceiver.lua scripts/rukeiSubServer") end
         complete = false
+        shell.run("clear")
     end
     if not fs.exists(path.user) then
         local file = fs.open(path.user, "w")
