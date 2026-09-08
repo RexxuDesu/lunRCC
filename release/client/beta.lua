@@ -3,7 +3,7 @@ local var = {
     user = nil,
     userR,
     userW,
-    vers = "3.2.4.3",
+    vers = "3.2.4.4",
     run = true,
     mainServer = 41
 }
@@ -265,13 +265,14 @@ local function scriptFetch()
     while var.run do
         local ID, packet = rednet.receive()
         if type(packet) == "table" and packet.action == "fetch" then
+            io.write("\n" .. var.user .. "@:~$ client " .. ID .. " downloading file: " .. packet.script)
             local file = packet.script
             if fs.exists("scripts/" .. file) and not fs.isDir(file) then
                 local localFile = io.open(("scripts/" .. file), "r")
                 local content = localFile:read("*a")
                 localFile:close()
                 rednet.send(ID, content)
-                io.write("\n" .. var.user .. "@:~$ " .. file .. " downloaded to " .. ID)
+                io.write("\n" .. var.user .. "@:~$ " .. file .. " downloaded to client " .. ID)
                 io.write("\n" .. var.user .. "@:~$ ")
             else
                 rednet.send(ID, "Error: File can't be processed")

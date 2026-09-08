@@ -1,5 +1,5 @@
 -- script made in Rukei
-if not peripheral.find("modem", rednet.open) then io.write("Unable to find modem. Quitting in 2s...\n") sleep (2) os.reboot()
+if not peripheral.find("modem") then io.write("Unable to find modem. Quitting in 2s...\n") sleep (2) os.reboot()
 else rednet.open(peripheral.getName(peripheral.find("modem"))) end
 local run = true
 while run do
@@ -8,7 +8,7 @@ while run do
     io.write("Enter script name to save as: ")
     local scriptSource = read()
     io.write("Enter cloud ID: ")
-    local cloud = read()
+    local cloud = tonumber(read())
     rednet.send(cloud, { action = "fetch", script = scriptName })
     io.write("Requesting " .. scriptName .. " from cloud...\n")
     local ID, packet = rednet.receive(5)
