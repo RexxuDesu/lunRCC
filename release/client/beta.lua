@@ -51,6 +51,27 @@ local commands = {
                 return false
             end
         end
+        if force then
+            term.setTextColor(colors.red)
+            io.write("Force updating...\n")
+            term.setTextColor(colors.white)
+            shell.run("rm startup")
+            local suc, err = shell.run("wget " .. link.update .. " startup")
+            if suc then
+                term.setTextColor(colors.green)
+                io.write("Updated to version " .. latVers .. "\n")
+                term.setTextColor(colors.yellow)
+                io.write("Rebooting in 2s...")
+                term.setTextColor(colors.white)
+                sleep(2)
+                os.reboot()
+            else
+                term.setTextColor(colors.red)
+                io.write("Failed to update script: ", tostring(err) .. "\n")
+                term.setTextColor(colors.white)
+                return false
+            end
+        end
         io.write("Checking for updates...")
         local suc, err = shell.run("wget " .. link.vers .. " " .. path.latVers)
         if not suc then
@@ -69,27 +90,7 @@ local commands = {
                 var.vers = var.vers:match("^%s*(.-)%s*$")
                 if latVers ~= var.vers then
                     io.write("Latest version available: " .. latVers .. ".\nCurrent version: " .. var.vers .. "\n")
-                    if force then
-                        term.setTextColor(colors.red)
-                        io.write("Force updating...\n")
-                        term.setTextColor(colors.white)
-                        shell.run("rm startup")
-                        local suc, err = shell.run("wget " .. link.update .. " startup")
-                        if suc then
-                            term.setTextColor(colors.green)
-                            io.write("Updated to version " .. latVers .. "\n")
-                            term.setTextColor(colors.yellow)
-                            io.write("Rebooting in 2s...")
-                            term.setTextColor(colors.white)
-                            sleep(2)
-                            os.reboot()
-                        else
-                            term.setTextColor(colors.red)
-                            io.write("Failed to update script: ", tostring(err) .. "\n")
-                            term.setTextColor(colors.white)
-                            return false
-                        end
-                    elseif yes then
+                    if yes then
                         term.setTextColor(colors.green)
                         io.write("Do you want to proceed with the update? (y/n): ")
                         io.write("Updating...\n")
