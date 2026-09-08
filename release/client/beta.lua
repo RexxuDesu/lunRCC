@@ -233,7 +233,7 @@ local function checkFiles()
     if not fs.exists("scripts/") then shell.run("mkdir scripts/") end
     while complete do
         if not fs.exists("scripts/client.lua") then shell.run("wget https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/release/client/beta.lua scripts/client") end
-        if not fs.exists("scripts/rukeiSubServer.lua") then shell.run("wget https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/release/server/subserver/rednetReceiver.lua scripts/rukeiSubServer.lua") end
+        if not fs.exists("scripts/rukeiSubServer.lua") then shell.run("wget https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/release/server/subserver/rednetReceiver.lua scripts/rukeiSubServer") end
         complete = false
     end
     if not fs.exists(path.user) then
@@ -252,41 +252,46 @@ local function parseCommand(input)
     return command, args
 end
 local function scriptFetch()
-    local ID, packet = rednet.receive()
-    if type(packet) == table and packet.action == "fetch" then
-        local file = packet.script
-        if fs.exists("scripts/" .. file) and not fs.isDir(file) then
-            local localFile = io.open(file, "r")
-            local content = localFile:read("*a")
-            localFile:close()
-            rednet.send(ID, content)
-            io.write(var.user .. "@:~$ " .. file .. " downloaded to " .. ID .. "\n")
-        else
-            rednet.send(ID, "Error: File can't be processed")
-        end
-    end
-end
-checkFiles()
-io.write("Version: " .. var.vers .. "\n")
-while var.run do
-    io.write(var.user .. "@:~$ ")
-    local input = read()
-    local parts = {}
-    for command in string.gmatch(input, "[^&]+") do table.insert(parts, command) end
-    local success = true
-    for _, commandInput in ipairs(parts) do
-        commandInput = commandInput:gsub("^%s+", ""):gsub("%s+$", "")
-        if success and var.run then
-            local command, args = parseCommand(commandInput)
-            if commands[command] then
-                success = commands[command](args)
-                if success == nil then success = true end
+    while var.run do
+        local ID, packet = rednet.receive()
+        if type(packet) == table and packet.action == "fetch" then
+            local file = packet.script
+            if fs.exists("scripts/" .. file) and not fs.isDir(file) then
+                local localFile = io.open(file, "r")
+                local content = localFile:read("*a")
+                localFile:close()
+                rednet.send(ID, content)
+                io.write(var.user .. "@:~$ " .. file .. " downloaded to " .. ID .. "\n")
             else
-                term.setTextColor(colors.red)
-                io.write("Unknown command: " .. command .. "\n")
-                term.setTextColor(colors.white)
-                success = false
+                rednet.send(ID, "Error: File can't be processed")
             end
         end
     end
 end
+local function main()
+    checkFiles()
+    io.write("Version: " .. var.vers .. "\n")
+    while var.run do
+        io.write(var.user .. "@:~$ ")
+        local input = read()
+        local parts = {}
+        for command in string.gmatch(input, "[^&]+") do table.insert(parts, command) end
+        local success = true
+        for _, commandInput in ipairs(parts) do
+            commandInput = commandInput:gsub("^%s+", ""):gsub("%s+$", "")
+            if success and var.run then
+                local command, args = parseCommand(commandInput)
+                if commands[command] then
+                    success = commands[command](args)
+                    if success == nil then success = true end
+                else
+                    term.setTextColor(colors.red)
+                    io.write("Unknown command: " .. command .. "\n")
+                    term.setTextColor(colors.white)
+                    success = false
+                end
+            end
+        end
+    end
+end
+parallel.waitForAny(main, scriptFetch)
