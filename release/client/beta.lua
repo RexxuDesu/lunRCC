@@ -15,6 +15,35 @@ local link = {
     vers = "https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/release/client/version.txt",
     update = "https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/release/client/beta.lua"
 }
+local function cmdRes()
+    term.setTextColor(colors.green)
+    io.write(var.user .. "@:~$ Command sent!")
+    term.setTextColor(colors.white)
+end
+local function checkFiles()
+    local complete = true
+    if not fs.exists("scripts/") then shell.run("mkdir scripts/") end
+    while complete do
+        if not fs.exists("scripts/client") then shell.run("wget https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/release/client/beta.lua scripts/client") end
+        if not fs.exists("scripts/rukeiSubServer") then shell.run("wget https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/release/server/subserver/rednetReceiver.lua scripts/rukeiSubServer") end
+        complete = false
+        shell.run("clear")
+    end
+    if not fs.exists(path.user) then
+        local file = fs.open(path.user, "w")
+        file.write("root")
+        file.close()
+    end
+    local file = fs.open(path.user, "r")
+    var.user = file.readLine()
+    file.close()
+end
+local function parseCommand(input)
+    local args = {}
+    for word in string.gmatch(input, "%S+") do table.insert(args, word) end
+    local command = table.remove(args, 1)
+    return command, args
+end
 local commands = {
     ["help"] = function() io.write("Available commands: help | version | change user | clear | update | exit | craft | server | gate | e1 | e2 | e3 | e4 | fuel\n") end,
     ["version"] = function() io.write("Current running version: " .. var.vers .. "\n") end,
@@ -232,35 +261,6 @@ local commands = {
         return true
     end
 }
-local function cmdRes()
-    term.setTextColor(colors.green)
-    io.write(var.user .. "@:~$ Command sent!")
-    term.setTextColor(colors.white)
-end
-local function checkFiles()
-    local complete = true
-    if not fs.exists("scripts/") then shell.run("mkdir scripts/") end
-    while complete do
-        if not fs.exists("scripts/client") then shell.run("wget https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/release/client/beta.lua scripts/client") end
-        if not fs.exists("scripts/rukeiSubServer") then shell.run("wget https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/release/server/subserver/rednetReceiver.lua scripts/rukeiSubServer") end
-        complete = false
-        shell.run("clear")
-    end
-    if not fs.exists(path.user) then
-        local file = fs.open(path.user, "w")
-        file.write("root")
-        file.close()
-    end
-    local file = fs.open(path.user, "r")
-    var.user = file.readLine()
-    file.close()
-end
-local function parseCommand(input)
-    local args = {}
-    for word in string.gmatch(input, "%S+") do table.insert(args, word) end
-    local command = table.remove(args, 1)
-    return command, args
-end
 local function scriptFetch()
     while var.run do
         local ID, packet = rednet.receive()
