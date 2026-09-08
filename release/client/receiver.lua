@@ -1,16 +1,24 @@
-rednet.open(peripheral.getName(peripheral.find("modem")))
-io.write("Enter script name to download: ")
-local scriptName = read()
-rednet.send(85, { action = "fetch", script = scriptName })
-io.write("Requesting " .. scriptName .. " from server...\n")
-local ID, packet = rednet.receive(5)
-if ID == 85 then
-    if packet:sub(1, 6) == "Error:" then print(packet)
-    else
-        local file = io.open("startup", "w")
-        file:write(packet)
-        file:close()
-        print("Successfully downloaded and saved: " .. scriptName)
-    end
-else print("Error: Server did not respond.")
+-- script made in Rukei
+if not rednet.open(peripheral.getName(peripheral.find("modem"))) then io.write("Unable to find modem\n") 
+else rednet.open(peripheral.getName(peripheral.find("modem"))) end
+local run = true
+while run do
+    io.write("Enter script name to download: ")
+    local scriptName = read()
+    io.write("Enter script name to save as: ")
+    local scriptSource = read()
+    io.write("Enter cloud ID: ")
+    local cloud = read()
+    rednet.send(cloud, { action = "fetch", script = scriptName })
+    io.write("Requesting " .. scriptName .. " from cloud...\n")
+    local ID, packet = rednet.receive(5)
+    if ID == cloud then
+        if packet:sub(1, 6) == "Error:" then print(packet)
+        else
+            local file = io.open(scriptSource, "w")
+            file:write(packet)
+            file:close()
+            print("Successfully downloaded and saved: " .. scriptName)
+        end
+    else print("Error: Server did not respond.") end
 end
