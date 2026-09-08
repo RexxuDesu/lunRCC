@@ -251,7 +251,7 @@ local function parseCommand(input)
     local command = table.remove(args, 1)
     return command, args
 end
-local function()
+local function scriptFetch()
     local ID, packet = rednet.receive()
     if type(packet) == table and packet.action == "fetch" then
         local file = packet.script
