@@ -3,7 +3,7 @@ local var = {
     user = nil,
     userR,
     userW,
-    vers = "3.2.4.2",
+    vers = "3.2.4.3",
     run = true,
     mainServer = 41
 }
@@ -231,7 +231,7 @@ local function checkFiles()
     local complete = true
     if not fs.exists("scripts/") then shell.run("mkdir scripts/") end
     while complete do
-        if not fs.exists("scripts/client.lua") then shell.run("wget https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/release/client/beta.lua scripts/client.lua") end
+        if not fs.exists("scripts/client.lua") then shell.run("wget https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/release/client/beta.lua scripts/client") end
         if not fs.exists("scripts/rukeiSubServer.lua") then shell.run("wget https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/release/server/subserver/rednetReceiver.lua scripts/rukeiSubServer.lua") end
         complete = false
     end
