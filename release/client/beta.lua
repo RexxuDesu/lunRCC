@@ -271,8 +271,8 @@ local function scriptFetch()
                 local content = localFile:read("*a")
                 localFile:close()
                 rednet.send(ID, content)
-                io.write(var.user .. "@:~$ " .. file .. " downloaded to " .. ID .. "\n")
-                io.write(var.user .. "@:~$ ")
+                io.write("\n" .. var.user .. "@:~$ " .. file .. " downloaded to " .. ID)
+                io.write("\n" .. var.user .. "@:~$ ")
             else
                 rednet.send(ID, "Error: File can't be processed")
             end
