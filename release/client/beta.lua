@@ -58,8 +58,6 @@ local commands = {
             shell.run("rm startup")
             local suc, err = shell.run("wget " .. link.update .. " startup")
             if suc then
-                term.setTextColor(colors.green)
-                io.write("Updated to version " .. latVers .. "\n")
                 term.setTextColor(colors.yellow)
                 io.write("Rebooting in 2s...")
                 term.setTextColor(colors.white)
