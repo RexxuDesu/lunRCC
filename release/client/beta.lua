@@ -56,9 +56,10 @@ local commands = {
         end
         if script then
             shell.run("rm scripts/client")
-            shell.run("rm scripts/rednetReceiver")
-            if not fs.exists("scripts/client.lua") then shell.run("wget https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/release/client/beta.lua scripts/client") end
-            if not fs.exists("scripts/rukeiSubServer.lua") then shell.run("wget https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/release/server/subserver/rednetReceiver.lua scripts/rukeiSubServer") end
+            shell.run("rm scripts/rukeiSubServer")
+            if not fs.exists("scripts/client") then shell.run("wget https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/release/client/beta.lua scripts/client") end
+            if not fs.exists("scripts/rukeiSubServer") then shell.run("wget https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/release/server/subserver/rednetReceiver.lua scripts/rukeiSubServer") end
+            shell.run("clear")
             return true
         end
         if force then
@@ -240,8 +241,8 @@ local function checkFiles()
     local complete = true
     if not fs.exists("scripts/") then shell.run("mkdir scripts/") end
     while complete do
-        if not fs.exists("scripts/client.lua") then shell.run("wget https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/release/client/beta.lua scripts/client") end
-        if not fs.exists("scripts/rukeiSubServer.lua") then shell.run("wget https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/release/server/subserver/rednetReceiver.lua scripts/rukeiSubServer") end
+        if not fs.exists("scripts/client") then shell.run("wget https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/release/client/beta.lua scripts/client") end
+        if not fs.exists("scripts/rukeiSubServer") then shell.run("wget https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/release/server/subserver/rednetReceiver.lua scripts/rukeiSubServer") end
         complete = false
         shell.run("clear")
     end
@@ -271,6 +272,7 @@ local function scriptFetch()
                 localFile:close()
                 rednet.send(ID, content)
                 io.write(var.user .. "@:~$ " .. file .. " downloaded to " .. ID .. "\n")
+                io.write(var.user .. "@:~$ ")
             else
                 rednet.send(ID, "Error: File can't be processed")
             end
