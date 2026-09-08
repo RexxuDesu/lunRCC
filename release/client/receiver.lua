@@ -1,5 +1,5 @@
 -- script made in Rukei
-if not rednet.open(peripheral.getName(peripheral.find("modem"))) then io.write("Unable to find modem\n") 
+if not peripheral.find("modem", rednet.open) then io.write("Unable to find modem\n") 
 else rednet.open(peripheral.getName(peripheral.find("modem"))) end
 local run = true
 while run do
