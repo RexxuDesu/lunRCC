@@ -1,19 +1,23 @@
-// main server
 rednet.open(peripheral.getName(peripheral.find("modem")))
 local var = {
     craft = 60,
     server = 42,
     gate = 66,
     e1 = 65,
-    e2 = 64,
-    e3 = 63,
+    e2 = 63,
+    e3 = 64,
     e4 = 62,
     fuel = 78
 }
+local x = 1
+local y = 1
 local ID, packet
 local function display(msg)
     local monitor = peripheral.find("monitor")
+    monitor.setTextScale(0.5)
+    monitor.setCursorPos(x, y)
     monitor.write(os.date("[%H:%M:%S] ") .. msg)
+    y = y + 1
 end
 local commands = {
     ["craft"] = function()

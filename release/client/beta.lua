@@ -1,12 +1,11 @@
-// client or pocket computer
 rednet.open(peripheral.getName(peripheral.find("modem")))
 local var = {
     user = nil,
     userR,
     userW,
-    vers = "3.2.4.1",
+    vers = "3.2.4.2",
     run = true,
-    mainServer = 0
+    mainServer = 41
 }
 local path = {
     user = "user.txt",
@@ -169,51 +168,37 @@ local commands = {
     end,
     ["craft"] = function()
         rednet.send(var.mainServer, {command = "craft", args = {}})
-        term.setTextColor(colors.green)
-        io.write(var.user .. "@:~$ Command sent!")
-        term.setTextColor(colors.white)
+        cmdRes()
         return true
     end,
     ["server"] = function()
         rednet.send(var.mainServer, {command = "server", args = {}})
-        term.setTextColor(colors.green)
-        io.write(var.user .. "@:~$ Command sent!")
-        term.setTextColor(colors.white)
+        cmdRes()
         return true
     end,
     ["gate"] = function()
         rednet.send(var.mainServer, {command = "gate", args = {}})
-        term.setTextColor(colors.green)
-        io.write(var.user .. "@:~$ Command sent!")
-        term.setTextColor(colors.white)
+        cmdRes()
         return true
     end,
     ["e1"] = function()
         rednet.send(var.mainServer, {command = "e1", args = {}})
-        term.setTextColor(colors.green)
-        io.write(var.user .. "@:~$ Command sent!")
-        term.setTextColor(colors.white)
+        cmdRes()
         return true
     end,
     ["e2"] = function()
         rednet.send(var.mainServer, {command = "e2", args = {}})
-        term.setTextColor(colors.green)
-        io.write(var.user .. "@:~$ Command sent!")
-        term.setTextColor(colors.white)
+        cmdRes()
         return true
     end,
     ["e3"] = function()
         rednet.send(var.mainServer, {command = "e3", args = {}})
-        term.setTextColor(colors.green)
-        io.write(var.user .. "@:~$ Command sent!")
-        term.setTextColor(colors.white)
+        cmdRes()
         return true
     end,
     ["e4"] = function()
         rednet.send(var.mainServer, {command = "e4", args = {}})
-        term.setTextColor(colors.green)
-        io.write(var.user .. "@:~$ Command sent!")
-        term.setTextColor(colors.white)
+        cmdRes()
         return true
     end,
     ["fuel"] = function(args)
@@ -237,7 +222,19 @@ local commands = {
         return true
     end
 }
+local function cmdRes()
+    term.setTextColor(colors.green)
+    io.write(var.user .. "@:~$ Command sent!")
+    term.setTextColor(colors.white)
+end
 local function checkFiles()
+    local complete = true
+    if not fs.exists("scripts/") then shell.run("mkdir scripts/") end
+    while complete do
+        if not fs.exists("scripts/client.lua") then shell.run("wget https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/release/client/beta.lua scripts/client.lua") end
+        if not fs.exists("scripts/rukeiSubServer.lua") then shell.run("wget https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/release/server/subserver/rednetReceiver.lua scripts/rukeiSubServer.lua") end
+        complete = false
+    end
     if not fs.exists(path.user) then
         local file = fs.open(path.user, "w")
         file.write("root")
@@ -252,6 +249,21 @@ local function parseCommand(input)
     for word in string.gmatch(input, "%S+") do table.insert(args, word) end
     local command = table.remove(args, 1)
     return command, args
+end
+local function()
+    local ID, packet = rednet.receive()
+    if type(packet) == table and packet.action == "fetch" then
+        local file = packet.script
+        if fs.exists("scripts/" .. file) and not fs.isDir(file) then
+            local localFile = io.open(file, "r")
+            local content = localFile:read("*a")
+            localFile:close()
+            rednet.send(ID, content)
+            io.write(var.user .. "@:~$ " .. file .. " downloaded to " .. ID .. "\n")
+        else
+            rednet.send(ID, "Error: File can't be processed")
+        end
+    end
 end
 checkFiles()
 io.write("Version: " .. var.vers .. "\n")
