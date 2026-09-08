@@ -1,10 +1,12 @@
+// client or pocket computer
 rednet.open(peripheral.getName(peripheral.find("modem")))
 local var = {
     user = nil,
     userR,
     userW,
-    vers = "3.2.3.2",
-    run = true
+    vers = "3.2.4.1",
+    run = true,
+    mainServer = 0
 }
 local path = {
     user = "user.txt",
@@ -166,91 +168,73 @@ local commands = {
         return true
     end,
     ["craft"] = function()
-        rednet.send(60, "1")
+        rednet.send(var.mainServer, {command = "craft", args = {}})
         term.setTextColor(colors.green)
         io.write(var.user .. "@:~$ Command sent!")
         term.setTextColor(colors.white)
         return true
     end,
     ["server"] = function()
-        rednet.send(42, "1")
+        rednet.send(var.mainServer, {command = "server", args = {}})
         term.setTextColor(colors.green)
         io.write(var.user .. "@:~$ Command sent!")
         term.setTextColor(colors.white)
         return true
     end,
     ["gate"] = function()
-        rednet.send(66, "1")
+        rednet.send(var.mainServer, {command = "gate", args = {}})
         term.setTextColor(colors.green)
         io.write(var.user .. "@:~$ Command sent!")
         term.setTextColor(colors.white)
         return true
     end,
     ["e1"] = function()
-        rednet.send(65, "1")
+        rednet.send(var.mainServer, {command = "e1", args = {}})
         term.setTextColor(colors.green)
         io.write(var.user .. "@:~$ Command sent!")
         term.setTextColor(colors.white)
         return true
     end,
     ["e2"] = function()
-        rednet.send(64, "1")
+        rednet.send(var.mainServer, {command = "e2", args = {}})
         term.setTextColor(colors.green)
         io.write(var.user .. "@:~$ Command sent!")
         term.setTextColor(colors.white)
         return true
     end,
     ["e3"] = function()
-        rednet.send(63, "1")
+        rednet.send(var.mainServer, {command = "e3", args = {}})
         term.setTextColor(colors.green)
         io.write(var.user .. "@:~$ Command sent!")
         term.setTextColor(colors.white)
         return true
     end,
     ["e4"] = function()
-        rednet.send(62, "1")
+        rednet.send(var.mainServer, {command = "e4", args = {}})
         term.setTextColor(colors.green)
         io.write(var.user .. "@:~$ Command sent!")
         term.setTextColor(colors.white)
         return true
     end,
     ["fuel"] = function(args)
-        local give = false
-        local status = false
-        for _, arg in ipairs(args) do
-            if arg == "-g" then give = true
-            elseif arg == "-s" then status = true
-            else
-                term.setTextColor(colors.red)
-                io.write("Unknown option: " .. arg)
-                term.setTextColor(colors.white)
-                return false
-            end
+        rednet.send(var.mainServer, {command = "fuel", args = args})
+        term.setTextColor(colors.green)
+        io.write(var.user .. "@:~$ Command sent!")
+        term.setTextColor(colors.white)
+        local ID, packet = rednet.receive()
+        if ID == var.mainServer then
+            local total = math.floor(packet)
+            local h = math.floor(total / 3600)
+            local m = math.floor((total % 3600) / 60)
+            local s = total % 60
+            io.write(string.format(
+                "[Fuel] Time left: %02d:%02d:%02d\n",
+                h,
+                m,
+                s
+            ))
         end
-        if give then rednet.send(78, "give")
-        elseif status then
-            rednet.send(78, "status")
-            local ID, packet = rednet.receive()
-            if ID == 78 then
-                local total = math.floor(packet)
-                local h = math.floor(total / 3600)
-                local m = math.floor((total % 3600) / 60)
-                local s = total % 60
-                io.write(string.format(
-                    "[Fuel] Time left: %02d:%02d:%02d\n",
-                    h,
-                    m,
-                    s
-                ))
-            end
-        else
-            term.setTextColor(colors.red)
-            io.write("Syntax cannot be empty.\n")
-            io.write("usage: fuel -g | -s\n")
-            io.write("usage: -g | gives 64 nuclear fuel to the reactor\n")
-            io.write("usage: -s | checks nuclear fuel time remainder\n")
-            term.setTextColor(colors.white)
-        end
+        return true
     end
 }
 local function checkFiles()

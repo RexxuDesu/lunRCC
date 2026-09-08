@@ -1,64 +1,77 @@
+// main server
 rednet.open(peripheral.getName(peripheral.find("modem")))
 local var = {
-    sender = 0,
-    craft = 0,
-    server = 0,
-    gate = 0,
-    e1 = 0,
-    e2 = 0,
-    e3 = 0,
-    e4 = 0,
-    fuel = 0
+    craft = 60,
+    server = 42,
+    gate = 66,
+    e1 = 65,
+    e2 = 64,
+    e3 = 63,
+    e4 = 62,
+    fuel = 78
 }
-local function writeID(parse)
-    local fileWrite = fs.open("id.txt", "w")
-    io.write("Enter ID for " .. var.parse .. " ID: ")
-    local input = read()
-    fileWrite.write(input)
-    var[parse] = tonumber(input)
-    fileWrite.close()
+local ID, packet
+local function display(msg)
+    local monitor = peripheral.find("monitor")
+    monitor.write(os.date("[%H:%M:%S] ") .. msg)
 end
-local function checkFiles()
-    if not fs.exists("id.txt") then
-        local file = fs.open("id.txt", "w")
-        file.write("7")
-        file.close()
+local commands = {
+    ["craft"] = function()
+        rednet.send(var.craft, "1")
+        display("ID: " .. ID .. " sent command: craft.\n")
+    end,
+    ["server"] = function()
+        rednet.send(var.server, "1")
+        display("ID: " .. ID .. " sent command: server.\n")
+    end,
+    ["gate"] = function()
+        rednet.send(var.gate, "1")
+        display("ID: " .. ID .. " sent command: gate.\n")
+    end,
+    ["e1"] = function()
+        rednet.send(var.e1, "1")
+        display("ID: " .. ID .. " sent command: e1.\n")
+    end,
+    ["e2"] = function()
+        rednet.send(var.e2, "1")
+        display("ID: " .. ID .. " sent command: e2.\n")
+    end,
+    ["e3"] = function()
+        rednet.send(var.e3, "1")
+        display("ID: " .. ID .. " sent command: e3.\n")
+    end,
+    ["e4"] = function()
+        rednet.send(var.e4, "1")
+        display("ID: " .. ID .. " sent command: e4.\n")
+    end,
+    ["fuel"] = function(args)
+        local give = false
+        local status = false
+        for _, arg in ipairs(args) do
+            if arg == "-g" then give = true
+            elseif arg == "-s" then status = true
+            end
+        end
+        if give then 
+            rednet.send(var.fuel, "give")
+            display("ID: " .. ID .. " sent command: fuel -g.\n")
+        elseif status then
+            rednet.send(var.fuel, "status")
+            display("ID: " .. ID .. " sent command: fuel. -s\n")
+            local recvID, packet = rednet.receive()
+            if recvID == var.fuel then
+                rednet.send(ID, packet)
+            end
+        end
+    end,
+}
+while true do
+    ID, packet = rednet.receive()
+    if ID == 7 or ID == 85 then
+        local command = packet.command
+        local args = packet.args or {}
+        if commands[command] then
+            commands[command](args)
+        end
     end
-    local file = fs.open("id.txt", "r")
-    var.sender = tonumber(file.readLine())
-    var.craft = tonumber(file.readLine())
-    if var.craft == nil then
-        writeID("craft")
-    end
-    var.server = tonumber(file.readLine())
-    if var.server == nil then
-        writeID("server")
-    end
-    var.gate = tonumber(file.readLine())
-    if var.gate == nil then
-        writeID("gate")
-    end
-    var.e1 = tonumber(file.readLine())
-    if var.e1 == nil then
-        writeID("e1")
-    end
-    var.e2 = tonumber(file.readLine())
-    if var.e2 == nil then
-        writeID("e2")
-    end
-    var.e3 = tonumber(file.readLine())
-    if var.e3 == nil then
-        writeID("e3")
-    end
-    var.e4 = tonumber(file.readLine())
-    if var.e4 == nil then
-        writeID("e4")
-    end
-    var.fuel = tonumber(file.readLine())
-    if var.fuel == nil then
-        writeID("fuel")
-    end
-    file.close()
 end
-checkFiles()
-parallel.waitForAny
