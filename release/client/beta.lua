@@ -3,7 +3,7 @@ local var = {
     user = nil,
     userR,
     userW,
-    vers = "3.2.4.4",
+    vers = "3.2.4.5",
     run = true,
     mainServer = 41
 }
@@ -45,10 +45,10 @@ local function parseCommand(input)
     return command, args
 end
 local commands = {
-    ["help"] = function() io.write("Available commands: help | version | change user | clear | update | exit | craft | server | gate | e1 | e2 | e3 | e4 | fuel\n") end,
+    ["help"] = function() io.write("Available commands: help | version | id |cuser | clear | update | exit | craft | server | gate | e1 | e2 | e3 | e4 | fuel\n") end,
     ["version"] = function() io.write("Current running version: " .. var.vers .. "\n") end,
     ["id"] = function() shell.run("id") end,
-    ["change user"] = function()
+    ["cuser"] = function()
         if not fs.exists(path.user) then
             local file = fs.open(path.user, "w")
             file.write("root")
@@ -66,6 +66,7 @@ local commands = {
     end,
     ["clear"] = function()
         shell.run("clear")
+        io.write("[LunROS version: " .. var.vers .. "]\n")
         return true
     end,
     ["update"] = function(args)
@@ -265,24 +266,47 @@ local function scriptFetch()
     while var.run do
         local ID, packet = rednet.receive()
         if type(packet) == "table" and packet.action == "fetch" then
-            io.write("\n" .. var.user .. "@:~$ client " .. ID .. " downloading file: " .. packet.script)
+            term.setTextColor(colors.yellow)
+            io.write("\n[LunROS] Client " .. ID .. " requesting download for file: " .. packet.script .. ".\n")
+            term.setTextColor(colors.white)
+            io.write(var.user .. "@:~$ ")
             local file = packet.script
             if fs.exists("scripts/" .. file) and not fs.isDir(file) then
-                local localFile = io.open(("scripts/" .. file), "r")
-                local content = localFile:read("*a")
-                localFile:close()
-                rednet.send(ID, content)
-                io.write("\n" .. var.user .. "@:~$ " .. file .. " downloaded to client " .. ID)
-                io.write("\n" .. var.user .. "@:~$ ")
+                rednet.send(ID, "a")
+                local rID, rPacket = rednet.receive(20) 
+                if rID == ID and rPacket:lower() ~= "y" then
+                    term.setTextColor(colors.red)
+                    io.write("\n[LunROS] Client " .. ID .. " requested download for file: " .. packet.script .. " has been cancelled by client.\n")
+                    term.setTextColor(colors.white)
+                    io.write(var.user .. "@:~$ ")
+                else
+                    term.setTextColor(colors.yellow)
+                    io.write("\n[LunROS] Client " .. ID .. " downloading file: " .. packet.script .. ".\n")
+                    term.setTextColor(colors.white)
+                    io.write(var.user .. "@:~$ ")
+                    local localFile = io.open(("scripts/" .. file), "r")
+                    local content = localFile:read("*a")
+                    localFile:close()
+                    rednet.send(ID, content)
+                    term.setTextColor(colors.green)
+                    io.write("\n[LunROS] " .. file .. " downloaded to client " .. ID .. ".\n")
+                    term.setTextColor(colors.white)
+                    io.write(var.user .. "@:~$ ")
+                end
             else
+                term.setTextColor(colors.red)
+                io.write("\n[LunROS] Unknown file: " .. file .. ". Is the client smoking drugs?" .. ".\n")
+                term.setTextColor(colors.white)
+                io.write(var.user .. "@:~$ ")
                 rednet.send(ID, "Error: File can't be processed")
             end
+            term.setTextColor(colors.white)
         end
     end
 end
 local function main()
     checkFiles()
-    io.write("Version: " .. var.vers .. "\n")
+    io.write("[LunROS version: " .. var.vers .. "]\n")
     while var.run do
         io.write(var.user .. "@:~$ ")
         local input = read()

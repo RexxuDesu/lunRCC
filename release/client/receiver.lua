@@ -9,16 +9,23 @@ while run do
     local scriptSource = read()
     io.write("Enter cloud ID: ")
     local cloud = tonumber(read())
-    rednet.send(cloud, { action = "fetch", script = scriptName })
     io.write("Requesting " .. scriptName .. " from cloud...\n")
+    rednet.send(cloud, { action = "fetch", script = scriptName })
     local ID, packet = rednet.receive(5)
-    if ID == cloud then
-        if packet:sub(1, 6) == "Error:" then print(packet)
-        else
+    if ID == cloud and packet:lower() == "a" then
+        io.write("Package: " .. scriptName .. " is available, install? (y/n): ")
+        local input = read()
+        if input:lower() == "y" then 
+            rednet.send(ID, "y")
+            ID, packet = rednet.receive(5)
             local file = io.open(scriptSource, "w")
             file:write(packet)
             file:close()
             print("Successfully downloaded and saved: " .. scriptName)
+        else 
+            rednet.send(ID, "n")
+            io.write("Installation cancelled.\n") 
         end
+    elseif ID == cloud and packet:lower() ~= "a" then io.write("Unknown package: " .. scriptName .. "\n")
     else print("Error: Server did not respond.") end
 end
