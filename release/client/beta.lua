@@ -4,7 +4,7 @@ local var = {
     user = nil,
     userR,
     userW,
-    vers = "3.2.4.6",
+    vers = "3.2.4.7",
     run = true,
     mainServer = 41
 }
@@ -79,6 +79,7 @@ local commands = {
     end,
     ["ls"] = function()
         io.write(var.user .. "@:~$ ")
+        sleep(0.1)
         shell.run("ls")
     end,
     ["nano"] = function(args)
@@ -328,7 +329,7 @@ local function main()
     checkFiles()
     io.write("[LunROS version: " .. var.vers .. "]\n")
     while var.run do
-        io.write(var.user .. "@:~$ ")
+        io.write(shell.run("dir()") .. var.user .. "@:~$ ")
         local input = read()
         local parts = {}
         for command in string.gmatch(input, "[^&]+") do table.insert(parts, command) end
