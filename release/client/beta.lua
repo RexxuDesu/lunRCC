@@ -4,7 +4,7 @@ local var = {
     user = nil,
     userR,
     userW,
-    vers = "3.2.4.7",
+    vers = "3.2.4.8",
     run = true,
     mainServer = 41
 }
@@ -78,7 +78,7 @@ local commands = {
         for _, arg in ipairs(args) do shell.run("cd " .. arg) end
     end,
     ["ls"] = function()
-        io.write(var.user .. "@:~$ ")
+        io.write(var.user .. "@:~$/" .. shell.dir() .. " ")
         sleep(0.1)
         shell.run("ls")
     end,
@@ -290,7 +290,7 @@ local function scriptFetch()
             term.setTextColor(colors.yellow)
             io.write("\n[LunROS] Client " .. ID .. " requesting download for file: " .. packet.script .. ".\n")
             term.setTextColor(colors.white)
-            io.write(var.user .. "@:~$ ")
+            io.write(var.user .. "@:~$/" .. shell.dir() .. " ")
             local file = packet.script
             if fs.exists("scripts/" .. file) and not fs.isDir(file) then
                 rednet.send(ID, "a")
@@ -299,12 +299,12 @@ local function scriptFetch()
                     term.setTextColor(colors.red)
                     io.write("\n[LunROS] Client " .. ID .. " requested download for file: " .. packet.script .. " has been cancelled by client.\n")
                     term.setTextColor(colors.white)
-                    io.write(var.user .. "@:~$ ")
+                    io.write(var.user .. "@:~$/" .. shell.dir() .. " ")
                 else
                     term.setTextColor(colors.yellow)
                     io.write("\n[LunROS] Client " .. ID .. " downloading file: " .. packet.script .. ".\n")
                     term.setTextColor(colors.white)
-                    io.write(var.user .. "@:~$ ")
+                    io.write(var.user .. "@:~$/" .. shell.dir() .. " ")
                     local localFile = io.open(("scripts/" .. file), "r")
                     local content = localFile:read("*a")
                     localFile:close()
@@ -312,13 +312,13 @@ local function scriptFetch()
                     term.setTextColor(colors.green)
                     io.write("\n[LunROS] Script: " .. file .. " downloaded to client " .. ID .. ".\n")
                     term.setTextColor(colors.white)
-                    io.write(var.user .. "@:~$ ")
+                    io.write(var.user .. "@:~$/" .. shell.dir() .. " ")
                 end
             else
                 term.setTextColor(colors.red)
                 io.write("\n[LunROS] Unknown file: " .. file .. ". Is the client smoking drugs?" .. ".\n")
                 term.setTextColor(colors.white)
-                io.write(var.user .. "@:~$ ")
+                io.write(var.user .. "@:~$/" .. shell.dir() .. " ")
                 rednet.send(ID, "Error: File can't be processed")
             end
             term.setTextColor(colors.white)
@@ -329,7 +329,7 @@ local function main()
     checkFiles()
     io.write("[LunROS version: " .. var.vers .. "]\n")
     while var.run do
-        io.write(shell.dir() .. var.user .. "@:~$ ")
+        io.write(var.user .. "@:~$/" .. shell.dir() .. " ")
         local input = read()
         local parts = {}
         for command in string.gmatch(input, "[^&]+") do table.insert(parts, command) end
