@@ -1,9 +1,10 @@
-rednet.open(peripheral.getName(peripheral.find("modem")))
+if not peripheral.find("modem") then io.write("Unable to find modem. Quitting in 2s...\n") sleep (2) os.reboot()
+else rednet.open(peripheral.getName(peripheral.find("modem"))) end
 local var = {
     user = nil,
     userR,
     userW,
-    vers = "3.2.4.5",
+    vers = "3.2.4.6",
     run = true,
     mainServer = 41
 }
@@ -15,6 +16,10 @@ local link = {
     vers = "https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/release/client/version.txt",
     update = "https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/release/client/beta.lua"
 }
+local scripts = {
+    client = "wget https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/release/client/beta.lua scripts/client"
+    rukeiSubServer = "wget https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/release/server/subserver/rednetReceiver.lua scripts/rukeiSubServer"
+}
 local function cmdRes()
     term.setTextColor(colors.green)
     io.write(var.user .. "@:~$ Command sent!")
@@ -24,8 +29,8 @@ local function checkFiles()
     local complete = true
     if not fs.exists("scripts/") then shell.run("mkdir scripts/") end
     while complete do
-        if not fs.exists("scripts/client") then shell.run("wget https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/release/client/beta.lua scripts/client") end
-        if not fs.exists("scripts/rukeiSubServer") then shell.run("wget https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/release/server/subserver/rednetReceiver.lua scripts/rukeiSubServer") end
+        if not fs.exists("scripts/client") then shell.run(scripts.client) end
+        if not fs.exists("scripts/rukeiSubServer") then shell.run(scripts.rukeiSubServer) end
         complete = false
         shell.run("clear")
     end
@@ -69,6 +74,16 @@ local commands = {
         io.write("[LunROS version: " .. var.vers .. "]\n")
         return true
     end,
+    ["cd"] = function(args)
+        for _, arg in ipairs(args) do shell.run("cd " .. arg) end
+    end,
+    ["ls"] = function()
+        io.write(var.user .. "@:~$ ")
+        shell.run("ls")
+    end,
+    ["nano"] = function(args)
+        for _, arg in ipairs(args) do shell.run("edit " .. arg) end
+    end,
     ["update"] = function(args)
         local force = false
         local yes = false
@@ -87,8 +102,8 @@ local commands = {
         if script then
             shell.run("rm scripts/client")
             shell.run("rm scripts/rukeiSubServer")
-            if not fs.exists("scripts/client") then shell.run("wget https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/release/client/beta.lua scripts/client") end
-            if not fs.exists("scripts/rukeiSubServer") then shell.run("wget https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/release/server/subserver/rednetReceiver.lua scripts/rukeiSubServer") end
+            if not fs.exists("scripts/client") then shell.run(scripts.client) end
+            if not fs.exists("scripts/rukeiSubServer") then shell.run(scripts.rukeiSubServer) end
             shell.run("clear")
             return true
         end
@@ -241,6 +256,11 @@ local commands = {
         cmdRes()
         return true
     end,
+    ["el"] = function()
+        rednet.send(var.mainServer, {command = "el", args = {}})
+        cmdRes()
+        return true
+    end,
     ["fuel"] = function(args)
         rednet.send(var.mainServer, {command = "fuel", args = args})
         term.setTextColor(colors.green)
@@ -289,7 +309,7 @@ local function scriptFetch()
                     localFile:close()
                     rednet.send(ID, content)
                     term.setTextColor(colors.green)
-                    io.write("\n[LunROS] " .. file .. " downloaded to client " .. ID .. ".\n")
+                    io.write("\n[LunROS] Script: " .. file .. " downloaded to client " .. ID .. ".\n")
                     term.setTextColor(colors.white)
                     io.write(var.user .. "@:~$ ")
                 end
