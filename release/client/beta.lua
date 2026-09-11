@@ -329,7 +329,7 @@ local function main()
     checkFiles()
     io.write("[LunROS version: " .. var.vers .. "]\n")
     while var.run do
-        io.write(shell.run("dir()") .. var.user .. "@:~$ ")
+        io.write(shell.dir() .. var.user .. "@:~$ ")
         local input = read()
         local parts = {}
         for command in string.gmatch(input, "[^&]+") do table.insert(parts, command) end
