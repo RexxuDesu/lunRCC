@@ -4,7 +4,7 @@ local var = {
     user = nil,
     userR,
     userW,
-    vers = "3.2.4.8",
+    vers = "3.2.5.1",
     run = true,
     mainServer = 41
 }
@@ -53,19 +53,29 @@ local commands = {
     ["help"] = function() io.write("Available commands: help | version | id |cuser | clear | update | exit | craft | server | gate | e1 | e2 | e3 | e4 | fuel\n") end,
     ["version"] = function() io.write("Current running version: " .. var.vers .. "\n") end,
     ["id"] = function() shell.run("id") end,
-    ["cuser"] = function()
+    ["cuser"] = function(args)
+        local input
         if not fs.exists(path.user) then
             local file = fs.open(path.user, "w")
             file.write("root")
             file.close()
         end
         local file = fs.open(path.user, "w")
-        io.write("Enter new user: ")
-        local input = read()
-        file.write(input)
-        file.close()
-        file = fs.open(path.user, "r")
-        var.user = file.readLine()
+        for _, arg in ipairs(args) do
+            if arg ~= "" then
+                file.write(input)
+                file.close()
+                file = fs.open(path.user, "r")
+                var.user = file.readLine()
+            else
+                io.write("Enter new user: ")
+                local input = read()
+                file.write(input)
+                file.close()
+                file = fs.open(path.user, "r")
+                var.user = file.readLine()
+            end
+        end
         file.close()
         return true
     end,
@@ -280,6 +290,16 @@ local commands = {
             ))
         end
         return true
+    end,
+    ["net"] = function(args)
+        for _, arg in ipairs(args) do
+            if arg[1] == "-s" then 
+                rednet.send(tonumber(args[2]), args[3])
+                term.setTextColor(colors.green)
+                io.write(var.user .. "@:~/" .. shell.dir() .. "$ Packet sent!")
+                term.setTextColor(colors.white)
+            end
+        end
     end
 }
 local function scriptFetch()
