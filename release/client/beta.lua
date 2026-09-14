@@ -293,7 +293,7 @@ local commands = {
     end,
     ["net"] = function(args)
         for _, arg in ipairs(args) do
-            if arg[1] == "-s" then 
+            if args[1] == "-s" then
                 rednet.send(tonumber(args[2]), args[3])
                 term.setTextColor(colors.green)
                 io.write(var.user .. "@:~/" .. shell.dir() .. "$ Packet sent!")
