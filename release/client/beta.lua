@@ -63,7 +63,7 @@ local commands = {
         local file = fs.open(path.user, "w")
         for _, arg in ipairs(args) do
             if arg ~= "" then
-                file.write(input)
+                file.write(arg)
                 file.close()
                 file = fs.open(path.user, "r")
                 var.user = file.readLine()
