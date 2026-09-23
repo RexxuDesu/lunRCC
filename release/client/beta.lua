@@ -19,8 +19,8 @@ local link = {
 }
 local scripts = {
     client = "wget https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/release/client/beta.lua scripts/client",
-    rukeiSubServer = "wget https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/release/server/subserver/rednetReceiver.lua scripts/rukeiSubServer"
-    stasisServer = "wget https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/release/server/subserver/stasisChamber/stasisServer.lua scripts/stasisServer"
+    rukeiSubServer = "wget https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/release/server/subserver/rednetReceiver.lua scripts/rukeiSubServer",
+    stasisServer = "wget https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/release/server/subserver/stasisChamber/stasisServer.lua scripts/stasisServer",
     stasisPuller = "wget https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/release/server/subserver/stasisChamber/stasisPuller.lua scripts/stasisPuller"
 }
 local function cmdRes() -- DO NOT TOUCH
@@ -55,18 +55,26 @@ local function checkFiles()
     file.close()
 end
 local function stasis()
+    shell.run("clear")
+    io.write("Press any of the keys below to pull your pearl:\n")
+    io.write("  [t] Tethoris stasis.\n")
+    io.write("  [v] Victoria stasis.\n")
+    io.write("  [r] Rukei stasis.\n")
     while var.sts do
         local _, key = os.pullEvent("key")
         if key == keys.t then
             rednet.send(0, "1")
+            cmdRes()
             var.sts = false
             return true
         elseif key == keys.v then
             rednet.send(0, "1")
+            cmdRes()
             var.sts = false
             return true
         elseif key == keys.r then
             rednet.send(0, "1")
+            cmdRes()
             var.sts = false
             return true
         end
@@ -163,13 +171,13 @@ local commands = {
             if args[1] == "-h" then
                 io.write("cp\n")
                 io.write("Copies <syntax1> and saves as <syntax2>\n")
-            elseif args[2] then shell.run("cp " .. args[1] .. " " .. args[2]) end
+            elseif args[2] then shell.run("cp " .. args[1] .. " " .. args[2])
             else
                 term.setTextColor(colors.red)
                 io.write("Command requires syntax1 and syntax2.\n")
                 term.setTextColor(colors.white)
             end
-        else 
+        else
             term.setTextColor(colors.red)
             io.write("Command requires a syntax.\n")
             term.setTextColor(colors.white)
@@ -180,7 +188,7 @@ local commands = {
             if args[1] == "-h" then
                 io.write("mv\n")
                 io.write("Moves <syntax1> and saves as <syntax2>\n")
-            elseif args[2] then shell.run("mv " .. args[1] .. " " .. args[2]) end
+            elseif args[2] then shell.run("mv " .. args[1] .. " " .. args[2])
             else
                 term.setTextColor(colors.red)
                 io.write("Command requires syntax1 and syntax2.\n")
