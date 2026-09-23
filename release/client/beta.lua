@@ -4,7 +4,7 @@ local var = {
     user = nil,
     userR,
     userW,
-    vers = "3.2.6.2",
+    vers = "3.2.6.3",
     run = true,
     sts = false,
     mainServer = 41
@@ -25,7 +25,7 @@ local scripts = {
 }
 local function cmdRes() -- DO NOT TOUCH
     term.setTextColor(colors.green)
-    io.write(var.user .. "@:~$ Command sent!")
+    io.write(var.user .. "@:~/$ Command sent!")
     term.setTextColor(colors.white)
 end
 local function parseCommand(input) -- DO NOT TOUCH
@@ -232,6 +232,15 @@ local commands = {
         local force = false
         local yes = false
         local script = false
+        if args[1] == "-h" then
+            io.write("update\n")
+            io.write("Updates the software.\n")
+            io.write("Syntax:\n")
+            io.write("-h | Displays command info.\n")
+            io.write("-y | Appends yes to skip the (y/n) confirmation.\n")
+            io.write("-f | Forces an update.\n")
+            return true
+        end
         for _, arg in ipairs(args) do
             if arg == "-f" then force = true
             elseif arg == "-y" then yes = true
