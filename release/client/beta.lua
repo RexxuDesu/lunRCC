@@ -65,21 +65,17 @@ local function stasis()
         local _, key = os.pullEvent("key")
         if key == keys.t then
             rednet.send(0, "1")
-            cmdRes()
             var.sts = false
             return true
         elseif key == keys.v then
             rednet.send(0, "1")
-            cmdRes()
             var.sts = false
             return true
         elseif key == keys.r then
             rednet.send(0, "1")
-            cmdRes()
             var.sts = false
             return true
         elseif key == keys.c then
-            cmdRes()
             var.sts = false
             return true
         end
