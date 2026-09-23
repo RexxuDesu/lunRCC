@@ -4,7 +4,7 @@ local var = {
     user = nil,
     userR,
     userW,
-    vers = "3.2.6.1",
+    vers = "3.2.6.2",
     run = true,
     sts = false,
     mainServer = 41
@@ -60,6 +60,7 @@ local function stasis()
     io.write("  [t] Tethoris stasis.\n")
     io.write("  [v] Victoria stasis.\n")
     io.write("  [r] Rukei stasis.\n")
+    io.write("  [c] Cancel.\n")
     while var.sts do
         local _, key = os.pullEvent("key")
         if key == keys.t then
@@ -74,6 +75,10 @@ local function stasis()
             return true
         elseif key == keys.r then
             rednet.send(0, "1")
+            cmdRes()
+            var.sts = false
+            return true
+        elseif key == keys.c then
             cmdRes()
             var.sts = false
             return true
