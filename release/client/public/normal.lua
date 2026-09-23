@@ -27,6 +27,16 @@ local function parseCommand(input) -- DO NOT TOUCH
     local command = table.remove(args, 1)
     return command, args
 end
+local function checkFiles()
+    if not fs.exists(path.user) then
+        local file = fs.open(path.user, "w")
+        file.write("root")
+        file.close()
+    end
+    local file = fs.open(path.user, "r")
+    var.user = file.readLine()
+    file.close()
+end
 local function stasis()
     shell.run("clear")
     io.write("Press any of the keys below to pull your pearl:\n")
@@ -371,6 +381,7 @@ local commands = {
     end
 }
 local function main()
+    checkFiles()
     io.write("Public release.\n")
     io.write("[LunROS version: " .. var.vers .. "]\n")
     while var.run do
