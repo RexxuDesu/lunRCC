@@ -4,8 +4,9 @@ local var = {
     user = nil,
     userR,
     userW,
-    vers = "3.2.5.1",
+    vers = "3.2.6.1",
     run = true,
+    sts = false,
     mainServer = 41
 }
 local path = {
@@ -19,11 +20,19 @@ local link = {
 local scripts = {
     client = "wget https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/release/client/beta.lua scripts/client",
     rukeiSubServer = "wget https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/release/server/subserver/rednetReceiver.lua scripts/rukeiSubServer"
+    stasisServer = "wget https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/release/server/subserver/stasisChamber/stasisServer.lua scripts/stasisServer"
+    stasisPuller = "wget https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/release/server/subserver/stasisChamber/stasisPuller.lua scripts/stasisPuller"
 }
-local function cmdRes()
+local function cmdRes() -- DO NOT TOUCH
     term.setTextColor(colors.green)
     io.write(var.user .. "@:~$ Command sent!")
     term.setTextColor(colors.white)
+end
+local function parseCommand(input) -- DO NOT TOUCH
+    local args = {}
+    for word in string.gmatch(input, "%S+") do table.insert(args, word) end
+    local command = table.remove(args, 1)
+    return command, args
 end
 local function checkFiles()
     local complete = true
@@ -31,6 +40,8 @@ local function checkFiles()
     while complete do
         if not fs.exists("scripts/client") then shell.run(scripts.client) end
         if not fs.exists("scripts/rukeiSubServer") then shell.run(scripts.rukeiSubServer) end
+        if not fs.exists("scripts/stasisServer") then shell.run(scripts.stasisServer) end
+        if not fs.exists("scripts/stasisPuller") then shell.run(scripts.stasisPuller) end
         complete = false
         shell.run("clear")
     end
@@ -43,56 +54,170 @@ local function checkFiles()
     var.user = file.readLine()
     file.close()
 end
-local function parseCommand(input)
-    local args = {}
-    for word in string.gmatch(input, "%S+") do table.insert(args, word) end
-    local command = table.remove(args, 1)
-    return command, args
+local function stasis()
+    while var.sts do
+        local _, key = os.pullEvent("key")
+        if key == keys.t then
+            rednet.send(0, "1")
+            var.sts = false
+            return true
+        elseif key == keys.v then
+            rednet.send(0, "1")
+            var.sts = false
+            return true
+        elseif key == keys.r then
+            rednet.send(0, "1")
+            var.sts = false
+            return true
+        end
+    end
 end
 local commands = {
-    ["help"] = function() io.write("Available commands: help | version | id |cuser | clear | update | exit | craft | server | gate | e1 | e2 | e3 | e4 | fuel\n") end,
-    ["version"] = function() io.write("Current running version: " .. var.vers .. "\n") end,
-    ["id"] = function() shell.run("id") end,
+    ["help"] = function() io.write("Available commands: help | version | id | cuser | clear | cd | cp | mv | ls | nano | update | ex | craft | server | gate | ev | el | fuel | net | st\n") end,
+    ["version"] = function(args) 
+        if args[1] then
+            if args[1] == "-h" then
+                io.write("version\n")
+                io.write("Prints the current installed version.\n")
+            else
+                term.setTextColor(colors.red)
+                io.write("Command does not accept a syntax.\n")
+                term.setTextColor(colors.white)
+            end
+        else io.write("Current running version: " .. var.vers .. "\n") end
+    end,
+    ["id"] = function(args) 
+        if args[1] then
+            if args[1] == "-h" then
+                io.write("id\n")
+                io.write("Prints this computer's ID.\n")
+            else
+                term.setTextColor(colors.red)
+                io.write("Command does not accept a syntax.\n")
+                term.setTextColor(colors.white)
+            end
+        else shell.run("id") end
+    end,
     ["cuser"] = function(args)
-        local input
         if not fs.exists(path.user) then
             local file = fs.open(path.user, "w")
             file.write("root")
             file.close()
         end
         local file = fs.open(path.user, "w")
-        for _, arg in ipairs(args) do
-            if arg ~= "" then
-                file.write(arg)
-                file.close()
-                file = fs.open(path.user, "r")
-                var.user = file.readLine()
+        if args[1] then
+            if args[1] == "-h" then
+                io.write("cuser\n")
+                io.write("Changes the displayed username.\n")
             else
-                io.write("Enter new user: ")
-                local input = read()
-                file.write(input)
+                file.write(args[1])
                 file.close()
                 file = fs.open(path.user, "r")
                 var.user = file.readLine()
             end
+        else
+            io.write("Enter new user: ")
+            local input = read()
+            if input and input ~= "" then
+                file.write(input)
+                file.close()
+                file = fs.open(path.user, "r")
+                var.user = file.readLine()
+            else
+                term.setTextColor(colors.red)
+                io.write("Invalid entry detected.\n")
+                term.setTextColor(colors.white)
+            end
         end
         file.close()
-        return true
     end,
-    ["clear"] = function()
-        shell.run("clear")
-        io.write("[LunROS version: " .. var.vers .. "]\n")
-        return true
+    ["clear"] = function(args)
+        if args[1] then
+            if args[1] == "-h" then
+                io.write("clear\n")
+                io.write("Clears/wipes the screen.\n")
+            else
+                term.setTextColor(colors.red)
+                io.write("Command does not accept a syntax.\n")
+                term.setTextColor(colors.white)
+            end
+        else 
+            shell.run("clear")
+            io.write("[LunROS version: " .. var.vers .. "]\n")
+        end
     end,
     ["cd"] = function(args)
-        for _, arg in ipairs(args) do shell.run("cd " .. arg) end
+        if args[1] then
+            if args[1] == "-h" then
+                io.write("cd\n")
+                io.write("Changes the current directory, must need explaining?\n")
+            else shell.run("cd " .. args[1]) end
+        else 
+            term.setTextColor(colors.red)
+            io.write("Command requires a syntax.\n")
+            term.setTextColor(colors.white)
+        end
     end,
-    ["ls"] = function()
-        io.write(var.user .. "@:~$/" .. shell.dir() .. " \n")
-        shell.run("ls")
+    ["cp"] = function(args)
+        if args[1] then
+            if args[1] == "-h" then
+                io.write("cp\n")
+                io.write("Copies <syntax1> and saves as <syntax2>\n")
+            elseif args[2] then shell.run("cp " .. args[1] .. " " .. args[2]) end
+            else
+                term.setTextColor(colors.red)
+                io.write("Command requires syntax1 and syntax2.\n")
+                term.setTextColor(colors.white)
+            end
+        else 
+            term.setTextColor(colors.red)
+            io.write("Command requires a syntax.\n")
+            term.setTextColor(colors.white)
+        end
+    end,
+    ["mv"] = function(args)
+        if args[1] then
+            if args[1] == "-h" then
+                io.write("mv\n")
+                io.write("Moves <syntax1> and saves as <syntax2>\n")
+            elseif args[2] then shell.run("mv " .. args[1] .. " " .. args[2]) end
+            else
+                term.setTextColor(colors.red)
+                io.write("Command requires syntax1 and syntax2.\n")
+                term.setTextColor(colors.white)
+            end
+        else 
+            term.setTextColor(colors.red)
+            io.write("Command requires a syntax.\n")
+            term.setTextColor(colors.white)
+        end
+    end,
+    ["ls"] = function(args)
+        if args[1] then
+            if args[1] == "-h" then
+                io.write("ls\n")
+                io.write("Lists the current directory's contents, must need explaining?\n")
+            else
+                term.setTextColor(colors.red)
+                io.write("Command does not accept a syntax.\n")
+                term.setTextColor(colors.white)
+            end
+        else
+            io.write(var.user .. "@:~$/" .. shell.dir() .. " \n")
+            shell.run("ls")
+        end
     end,
     ["nano"] = function(args)
-        for _, arg in ipairs(args) do shell.run("edit " .. arg) end
+        if args[1] then
+            if args[1] == "-h" then
+                io.write("cd\n")
+                io.write("Changes the current directory, must need explaining?\n")
+            else shell.run("edit " .. args[1]) end
+        else 
+            term.setTextColor(colors.red)
+            io.write("Command requires a syntax.\n")
+            term.setTextColor(colors.white)
+        end
     end,
     ["update"] = function(args)
         local force = false
@@ -222,81 +347,194 @@ local commands = {
             end
         end
     end,
-    ["exit"] = function()
-        term.setTextColor(colors.yellow)
-        io.write(var.user .. "@:~$ Goodbye!\n")
-        term.setTextColor(colors.white)
-        sleep(1.3)
-        shell.run("clear")
-        var.run = false
-        return true
+    ["ex"] = function(args)
+        if args[1] then
+            if args[1] == "-h" then
+                io.write("ex\n")
+                io.write("Terminates the program\n")
+            else 
+                term.setTextColor(colors.red)
+                io.write("Command does not accept a syntax.\n")
+                term.setTextColor(colors.white)            
+            end
+        else 
+            term.setTextColor(colors.yellow)
+            io.write(var.user .. "@:~$ Goodbye!\n")
+            term.setTextColor(colors.white)
+            sleep(1.3)
+            shell.run("clear")
+            var.run = false
+        end
     end,
-    ["craft"] = function()
-        rednet.send(var.mainServer, {command = "craft", args = {}})
-        cmdRes()
-        return true
+    ["craft"] = function(args)
+        if args[1] then
+            if args[1] == "-h" then
+                io.write("craft\n")
+                io.write("Lifts/drop the crafting block in the Shinomiya Castle.\n")
+            else
+                term.setTextColor(colors.red)
+                io.write("Command does not accept a syntax.\n")
+                term.setTextColor(colors.white)
+            end
+        else
+            rednet.send(var.mainServer, {command = "craft", args = {}})
+            cmdRes()
+        end
     end,
-    ["server"] = function()
-        rednet.send(var.mainServer, {command = "server", args = {}})
-        cmdRes()
-        return true
+    ["server"] = function(args)
+        if args[1] then
+            if args[1] == "-h" then
+                io.write("server\n")
+                io.write("Lifts/drop the server block in the Shinomiya Castle.\n")
+            else
+                term.setTextColor(colors.red)
+                io.write("Command does not accept a syntax.\n")
+                term.setTextColor(colors.white)
+            end
+        else
+            rednet.send(var.mainServer, {command = "server", args = {}})
+            cmdRes()
+        end
     end,
-    ["gate"] = function()
-        rednet.send(var.mainServer, {command = "gate", args = {}})
-        cmdRes()
-        return true
+    ["gate"] = function(args)
+        if args[1] then
+            if args[1] == "-h" then
+                io.write("gate\n")
+                io.write("Opens/closes the gate in the Shinomiya Castle.\n")
+            else
+                term.setTextColor(colors.red)
+                io.write("Command does not accept a syntax.\n")
+                term.setTextColor(colors.white)
+            end
+        else
+            rednet.send(var.mainServer, {command = "gate", args = {}})
+            cmdRes()
+        end
     end,
-    ["e1"] = function()
-        rednet.send(var.mainServer, {command = "e1", args = {}})
-        cmdRes()
-        return true
+    ["ev"] = function(args)
+        if args[1] then
+            if args[1] == "-h" then
+                io.write("ev\n")
+                io.write("Calls/controls the elevator in the Shinomiya Castle.\n")
+                io.write("Syntax:\n")
+                io.write("-h | Displays command info.\n")
+                io.write("-1 | Calls elevator to the 1st floor.\n")
+                io.write("-2 | Calls elevator to the 2nd floor.\n")
+                io.write("-3 | Calls elevator to the 3rd floor.\n")
+                io.write("-4 | Calls elevator to the 4th floor.\n")
+            elseif args[1] == "-1" then
+                rednet.send(var.mainServer, {command = "e1", args = {}})
+                cmdRes()
+            elseif args[1] == "-2" then
+                rednet.send(var.mainServer, {command = "e2", args = {}})
+                cmdRes()
+            elseif args[1] == "-3" then
+                rednet.send(var.mainServer, {command = "e3", args = {}})
+                cmdRes()
+            elseif args[1] == "-4" then
+                rednet.send(var.mainServer, {command = "e4", args = {}})
+                cmdRes()
+            else
+                term.setTextColor(colors.red)
+                io.write("Unknown floor, did you type correctly?\n")
+                term.setTextColor(colors.white)
+            end
+        else
+            term.setTextColor(colors.red)
+            io.write("Requires syntax: -h | -1 | -2 | -3 | -4.\n")
+            term.setTextColor(colors.white)
+        end
     end,
-    ["e2"] = function()
-        rednet.send(var.mainServer, {command = "e2", args = {}})
-        cmdRes()
-        return true
-    end,
-    ["e3"] = function()
-        rednet.send(var.mainServer, {command = "e3", args = {}})
-        cmdRes()
-        return true
-    end,
-    ["e4"] = function()
-        rednet.send(var.mainServer, {command = "e4", args = {}})
-        cmdRes()
-        return true
-    end,
-    ["el"] = function()
-        rednet.send(var.mainServer, {command = "el", args = {}})
-        cmdRes()
-        return true
+    ["el"] = function(args)
+        if args[1] then
+            if args[1] == "-h" then
+                io.write("el\n")
+                io.write("Locks the elevator in the Shinomiya Castle.\n")
+            else
+                term.setTextColor(colors.red)
+                io.write("Command does not accept a syntax.\n")
+                term.setTextColor(colors.white)
+            end
+        else
+            rednet.send(var.mainServer, {command = "el", args = {}})
+            cmdRes()
+        end
     end,
     ["fuel"] = function(args)
-        rednet.send(var.mainServer, {command = "fuel", args = args})
-        term.setTextColor(colors.green)
-        io.write(var.user .. "@:~$ Command sent!")
-        term.setTextColor(colors.white)
-        local ID, packet = rednet.receive()
-        if ID == var.mainServer then
-            local total = math.floor(packet)
-            local h = math.floor(total / 3600)
-            local m = math.floor((total % 3600) / 60)
-            local s = total % 60
-            io.write(string.format(
-                "[Fuel] Time left: %02d:%02d:%02d\n",
-                h,
-                m,
-                s
-            ))
+        for _, arg in ipairs(args) do
+            if arg ~= nil or arg ~= "" then
+                if arg == "-s" or arg == "-g" then
+                    rednet.send(var.mainServer, {command = "fuel", args = args})
+                    term.setTextColor(colors.green)
+                    io.write(var.user .. "@:~$ Command sent!")
+                    term.setTextColor(colors.white)
+                    local ID, packet = rednet.receive()
+                    if ID == var.mainServer then
+                        local total = math.floor(packet)
+                        local h = math.floor(total / 3600)
+                        local m = math.floor((total % 3600) / 60)
+                        local s = total % 60
+                        io.write(string.format(
+                            "[Fuel] Time left: %02d:%02d:%02d\n",
+                            h,
+                            m,
+                            s
+                        ))
+                    end
+                elseif arg == "-h" then
+                    io.write("fuel\n")
+                    io.write("Checks the nuclear tube in the Shinomiya Castle.\n")
+                    io.write("Syntax:\n")
+                    io.write("-h | Displays command info.\n")
+                    io.write("-s | Checks how much time the fuel has left.\n")
+                    io.write("-g | Gives fuel to the rods.\n")
+                else 
+                    term.setTextColor(colors.red)
+                    io.write("Requires syntax: -h | -s | -g.\n")
+                    term.setTextColor(colors.white)
+                end
+            end
         end
-        return true
     end,
     ["net"] = function(args)
-        if args[1] == "-s" then
-            rednet.send(tonumber(args[2]), args[3])
-            term.setTextColor(colors.green)
-            io.write(var.user .. "@:~/" .. shell.dir() .. "$ Packet sent!")
+        if args[1] then
+            if args[1] == "-h" then
+                io.write("net\n")
+                io.write("Simulates rednet.send.\n")
+                io.write("Syntax:\n")
+                io.write("-h | Displays command info.\n")
+                io.write("-s <syntax1> <syntax2> | Sends a rednet.\n")
+            elseif args[1] == "-s" then 
+                if args[2] then 
+                    rednet.send(tonumber(args[2]), args[3])
+                    term.setTextColor(colors.green)
+                    io.write(var.user .. "@:~/" .. shell.dir() .. "$ Packet sent!")
+                    term.setTextColor(colors.white)
+                else
+                    term.setTextColor(colors.red)
+                    io.write("Command requires syntax1 and syntax2.\n")
+                    term.setTextColor(colors.white)
+                end
+            end
+        else 
+            term.setTextColor(colors.red)
+            io.write("Command requires a syntax.\n")
             term.setTextColor(colors.white)
+        end
+    end,
+    ["st"] = function(args)
+        if args[1] then
+            if args[1] == "-h" then
+                io.write("st\n")
+                io.write("Activates a stasis chamber.\n")
+            else
+                term.setTextColor(colors.red)
+                io.write("Command does not accept a syntax.\n")
+                term.setTextColor(colors.white)
+            end
+        else
+            var.sts = true
+            stasis()
         end
     end
 }
