@@ -4,7 +4,7 @@ local var = {
     user = nil,
     userR,
     userW,
-    vers = "3.2.6.6",
+    vers = "3.2.6.7",
     run = true,
     sts = false,
     mainServer = 41
@@ -494,38 +494,41 @@ local commands = {
         end
     end,
     ["fuel"] = function(args)
-        for _, arg in ipairs(args) do
-            if arg ~= nil or arg ~= "" then
-                if arg == "-s" or arg == "-g" then
-                    rednet.send(var.mainServer, {command = "fuel", args = args})
-                    term.setTextColor(colors.green)
-                    io.write(var.user .. "@:~$ Command sent!")
-                    term.setTextColor(colors.white)
-                    local ID, packet = rednet.receive()
-                    if ID == var.mainServer then
-                        local total = math.floor(packet)
-                        local h = math.floor(total / 3600)
-                        local m = math.floor((total % 3600) / 60)
-                        local s = total % 60
-                        io.write(string.format(
-                            "[Fuel] Time left: %02d:%02d:%02d\n",
-                            h,
-                            m,
-                            s
-                        ))
-                    end
-                elseif arg == "-h" then
-                    io.write("fuel\n")
-                    io.write("Checks the nuclear tube in the Shinomiya Castle.\n")
-                    io.write("Syntax:\n")
-                    io.write("-h | Displays command info.\n")
-                    io.write("-s | Checks how much time the fuel has left.\n")
-                    io.write("-g | Gives fuel to the rods.\n")
-                else 
-                    term.setTextColor(colors.red)
-                    io.write("Requires syntax: -h | -s | -g.\n")
-                    term.setTextColor(colors.white)
+        if args[1] then
+            if args[1] == "-s" then
+                rednet.send(var.mainServer, {command = "fuel", args = args[1]})
+                term.setTextColor(colors.green)
+                io.write(var.user .. "@:~$ Command sent!")
+                term.setTextColor(colors.white)
+                local ID, packet = rednet.receive()
+                if ID == var.mainServer then
+                    local total = math.floor(packet)
+                    local h = math.floor(total / 3600)
+                    local m = math.floor((total % 3600) / 60)
+                    local s = total % 60
+                    io.write(string.format(
+                        "[Fuel] Time left: %02d:%02d:%02d\n",
+                        h,
+                        m,
+                        s
+                    ))
                 end
+            elseif args[1] == "-g" then
+                rednet.send(var.mainServer, {command = "fuel", args = args[1]})
+                term.setTextColor(colors.green)
+                io.write(var.user .. "@:~$ Command sent!")
+                term.setTextColor(colors.white)
+            elseif args[1] == "-h" then
+                io.write("fuel\n")
+                io.write("Checks the nuclear tube in the Shinomiya Castle.\n")
+                io.write("Syntax:\n")
+                io.write("-h | Displays command info.\n")
+                io.write("-s | Checks how much time the fuel has left.\n")
+                io.write("-g | Gives fuel to the rods.\n")
+            else 
+                term.setTextColor(colors.red)
+                io.write("Requires syntax: -h | -s | -g.\n")
+                term.setTextColor(colors.white)
             end
         end
     end,
