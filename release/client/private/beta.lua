@@ -4,7 +4,7 @@ local var = {
     user = nil,
     userR,
     userW,
-    vers = "3.2.6.6",
+    vers = "3.2.7.1",
     run = true,
     sts = false,
     mainServer = 41
@@ -12,13 +12,15 @@ local var = {
 local path = {
     user = "user.txt",
     latVers = "versionLatest.txt"
+    betaVers = "versionBeta.txt"
 }
 local link = {
-    vers = "https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/release/client/version.txt",
-    update = "https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/release/client/beta.lua"
+    versRelease = "https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/release/client/private/versionRelease.txt",
+    versBeta = "https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/release/client/private/versionBeta.txt",
+    updateRelease = "https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/release/client/private/release.lua",
+    updateBeta = "https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/release/client/private/beta.lua"
 }
 local scripts = {
-    client = "wget https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/release/client/beta.lua scripts/client",
     rukeiSubServer = "wget https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/release/server/subserver/rednetReceiver.lua scripts/rukeiSubServer",
     stasisServer = "wget https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/release/server/subserver/stasisChamber/stasisServer.lua scripts/stasisServer",
     stasisPuller = "wget https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/release/server/subserver/stasisChamber/stasisPuller.lua scripts/stasisPuller"
@@ -38,7 +40,6 @@ local function checkFiles()
     local complete = true
     if not fs.exists("scripts/") then shell.run("mkdir scripts/") end
     while complete do
-        if not fs.exists("scripts/client") then shell.run(scripts.client) end
         if not fs.exists("scripts/rukeiSubServer") then shell.run(scripts.rukeiSubServer) end
         if not fs.exists("scripts/stasisServer") then shell.run(scripts.stasisServer) end
         if not fs.exists("scripts/stasisPuller") then shell.run(scripts.stasisPuller) end
@@ -239,6 +240,7 @@ local commands = {
         local force = false
         local yes = false
         local script = false
+        local beta = false
         if args[1] == "-h" then
             io.write("update\n")
             io.write("Updates the software.\n")
@@ -253,6 +255,7 @@ local commands = {
             if arg == "-f" then force = true
             elseif arg == "-y" then yes = true
             elseif arg == "-s" then script = true
+            elseif arg == "-b" then beta = true
             else
                 term.setTextColor(colors.red)
                 print("Unknown option: " .. arg)
@@ -261,87 +264,104 @@ local commands = {
             end
         end
         if script then
-            shell.run("rm scripts/client")
             shell.run("rm scripts/rukeiSubServer")
             shell.run("rm scripts/stasisServer")
             shell.run("rm scripts/stasisPuller")
-            if not fs.exists("scripts/client") then shell.run(scripts.client) end
             if not fs.exists("scripts/rukeiSubServer") then shell.run(scripts.rukeiSubServer) end
             if not fs.exists("scripts/stasisServer") then shell.run(scripts.stasisServer) end
             if not fs.exists("scripts/stasisPuller") then shell.run(scripts.stasisPuller) end
             shell.run("clear")
             return true
         end
-        if force then
-            term.setTextColor(colors.red)
-            io.write("Force updating...\n")
-            term.setTextColor(colors.white)
-            shell.run("rm startup")
-            local suc, err = shell.run("wget " .. link.update .. " startup")
-            if suc then
-                term.setTextColor(colors.yellow)
-                io.write("Rebooting in 2s...")
-                term.setTextColor(colors.white)
-                sleep(2)
-                os.reboot()
-            else
-                term.setTextColor(colors.red)
-                io.write("Failed to update script: ", tostring(err) .. "\n")
-                term.setTextColor(colors.white)
-                return false
-            end
-        end
         io.write("Checking for updates...")
-        local suc, err = shell.run("wget " .. link.vers .. " " .. path.latVers)
+        if beta then local suc, err = shell.run("wget " .. link.versBeta .. " " .. path.betaVers)
+        else local suc, err = shell.run("wget " .. link.versRelease .. " " .. path.latVers) end
         if not suc then
             term.setTextColor(colors.red)
             print("Failed to fetch version info ", tostring(err))
             term.setTextColor(colors.white)
-            return false
+            if not force then return false end
         end
-        if fs.exists(path.latVers) then
-            local file = fs.open(path.latVers, "r")
+        if beta then
+            if not fs.exists(path.betaVers) then
+                io.write(path.betaVers .. " does not exist")
+                return false
+            end
+        end
+        if not fs.exists(path.latVers) then
+            io.write(path.latVers .. " does not exist")
+            return false
+        else
+            local file
+            if beta then file = fs.open(path.betaVers, "r")
+            else file = fs.open(path.latVers, "r") end
             if file then
+                if beta then file = fs.open(path.betaVers, "r")
+                else file = fs.open(path.latVers, "r") end
                 local latVers = file.readLine()
                 file.close()
-                fs.delete(path.latVers)
+                if fs.exists(path.betaVers) then fs.delete(path.betaVers)
+                else fs.delete(path.latVers) end
                 latVers = latVers:match("^%s*(.-)%s*$")
                 var.vers = var.vers:match("^%s*(.-)%s*$")
-                if latVers ~= var.vers then
-                    io.write("Latest version available: " .. latVers .. ".\nCurrent version: " .. var.vers .. "\n")
-                    if yes then
-                        term.setTextColor(colors.green)
-                        io.write("Do you want to proceed with the update? (y/n): ")
-                        io.write("Updating...\n")
-                        term.setTextColor(colors.white)
-                        shell.run("rm startup")
-                        local suc, err = shell.run("wget " .. link.update .. " startup")
+                if beta then
+                    if yes or force then
+                        if not force then
+                            term.setTextColor(colors.green)
+                            io.write("Do you want to proceed with the beta installation? (y/n): ")
+                            io.write("Installing...\n")
+                            term.setTextColor(colors.white)
+                        end
+                        shell.run("rm beta")
+                        local suc, err = shell.run("wget " .. link.updateBeta .. " beta")
                         if suc then
                             term.setTextColor(colors.green)
-                            io.write("Updated to version " .. latVers .. "\n")
-                            term.setTextColor(colors.yellow)
-                            io.write("Rebooting in 2s...")
+                            io.write("Updated to version " .. betaVers .. "\n")
                             term.setTextColor(colors.white)
-                            sleep(2)
-                            os.reboot()
                         else
                             term.setTextColor(colors.red)
-                            io.write("Failed to update script: ", tostring(err) .. "\n")
+                            io.write("Failed to download beta: ", tostring(err) .. "\n")
                             term.setTextColor(colors.white)
-                            return false
                         end
                     else
                         term.setTextColor(colors.green)
-                        io.write("Do you want to proceed with the update? (y/n): ")
+                        io.write("Do you want to proceed with the beta installation? (y/n): ")
                         term.setTextColor(colors.white)
                         local proceed = read()
                         io.write("\n")
                         if proceed:lower() == "y" then
                             term.setTextColor(colors.green)
-                            io.write("Updating...\n")
+                            io.write("Installing...\n")
                             term.setTextColor(colors.white)
+                            shell.run("rm beta")
+                            local suc, err = shell.run("wget " .. link.updateBeta .. " beta")
+                            if suc then
+                                term.setTextColor(colors.green)
+                                io.write("Updated to version " .. betaVers .. "\n")
+                                term.setTextColor(colors.white)
+                            else
+                                term.setTextColor(colors.red)
+                                io.write("Failed to download beta: ", tostring(err) .. "\n")
+                                term.setTextColor(colors.white)
+                            end
+                        else
+                            term.setTextColor(colors.red)
+                            io.write("Installation aborted.\n")
+                            term.setTextColor(colors.white)
+                        end
+                    end
+                else
+                    if latVers ~= var.vers then
+                        io.write("Latest version available: " .. latVers .. ".\nCurrent version: " .. var.vers .. "\n")
+                        if yes or force then
+                            if not force then
+                                term.setTextColor(colors.green)
+                                io.write("Do you want to proceed with the update? (y/n): ")
+                                io.write("Updating...\n")
+                                term.setTextColor(colors.white)
+                            end
                             shell.run("rm startup")
-                            local suc, err = shell.run("wget " .. link.update .. " startup")
+                            local suc, err = shell.run("wget " .. link.updateRelease .. " startup")
                             if suc then
                                 term.setTextColor(colors.green)
                                 io.write("Updated to version " .. latVers .. "\n")
@@ -354,26 +374,48 @@ local commands = {
                                 term.setTextColor(colors.red)
                                 io.write("Failed to update script: ", tostring(err) .. "\n")
                                 term.setTextColor(colors.white)
-                                return false
                             end
                         else
-                            term.setTextColor(colors.red)
-                            io.write("Update aborted.\n")
+                            term.setTextColor(colors.green)
+                            io.write("Do you want to proceed with the update? (y/n): ")
                             term.setTextColor(colors.white)
-                            return false
+                            local proceed = read()
+                            io.write("\n")
+                            if proceed:lower() == "y" then
+                                term.setTextColor(colors.green)
+                                io.write("Updating...\n")
+                                term.setTextColor(colors.white)
+                                shell.run("rm startup")
+                                local suc, err = shell.run("wget " .. link.updateRelease .. " startup")
+                                if suc then
+                                    term.setTextColor(colors.green)
+                                    io.write("Updated to version " .. latVers .. "\n")
+                                    term.setTextColor(colors.yellow)
+                                    io.write("Rebooting in 2s...")
+                                    term.setTextColor(colors.white)
+                                    sleep(2)
+                                    os.reboot()
+                                else
+                                    term.setTextColor(colors.red)
+                                    io.write("Failed to update script: ", tostring(err) .. "\n")
+                                    term.setTextColor(colors.white)
+                                end
+                            else
+                                term.setTextColor(colors.red)
+                                io.write("Update aborted.\n")
+                                term.setTextColor(colors.white)
+                            end
                         end
+                    else
+                        term.setTextColor(colors.green)
+                        io.write("No current updates available.\n")
+                        term.setTextColor(colors.white)
                     end
-                else
-                    term.setTextColor(colors.green)
-                    io.write("No current updates available.\n")
-                    term.setTextColor(colors.white)
-                    return true
                 end
             else
                 term.setTextColor(colors.red)
                 io.write("Failed to read file.\n")
                 term.setTextColor(colors.white)
-                return false
             end
         end
     end,
@@ -452,25 +494,16 @@ local commands = {
                 io.write("-2 | Calls elevator to the 2nd floor.\n")
                 io.write("-3 | Calls elevator to the 3rd floor.\n")
                 io.write("-4 | Calls elevator to the 4th floor.\n")
-            elseif args[1] == "-0" then
-                rednet.send(var.mainServer, {command = "e0", args = {}})
-                cmdRes()
-            elseif args[1] == "-1" then
-                rednet.send(var.mainServer, {command = "e1", args = {}})
-                cmdRes()
-            elseif args[1] == "-2" then
-                rednet.send(var.mainServer, {command = "e2", args = {}})
-                cmdRes()
-            elseif args[1] == "-3" then
-                rednet.send(var.mainServer, {command = "e3", args = {}})
-                cmdRes()
-            elseif args[1] == "-4" then
-                rednet.send(var.mainServer, {command = "e4", args = {}})
-                cmdRes()
             else
-                term.setTextColor(colors.red)
-                io.write("Unknown floor, did you type correctly?\n")
-                term.setTextColor(colors.white)
+                local floor = {"-1", "-2", "-3", "-4"}
+                for _, arg in ipairs (floor) do
+                    if args[1] == arg then rednet.send(var.mainServer, {command = args[1], args = {}})
+                    else
+                        term.setTextColor(colors.red)
+                        io.write("Unknown floor, did you type correctly?\n")
+                        term.setTextColor(colors.white)
+                    end
+                end
             end
         else
             term.setTextColor(colors.red)
@@ -494,38 +527,41 @@ local commands = {
         end
     end,
     ["fuel"] = function(args)
-        for _, arg in ipairs(args) do
-            if arg ~= nil or arg ~= "" then
-                if arg == "-s" or arg == "-g" then
-                    rednet.send(var.mainServer, {command = "fuel", args = args})
-                    term.setTextColor(colors.green)
-                    io.write(var.user .. "@:~$ Command sent!")
-                    term.setTextColor(colors.white)
-                    local ID, packet = rednet.receive()
-                    if ID == var.mainServer then
-                        local total = math.floor(packet)
-                        local h = math.floor(total / 3600)
-                        local m = math.floor((total % 3600) / 60)
-                        local s = total % 60
-                        io.write(string.format(
-                            "[Fuel] Time left: %02d:%02d:%02d\n",
-                            h,
-                            m,
-                            s
-                        ))
-                    end
-                elseif arg == "-h" then
-                    io.write("fuel\n")
-                    io.write("Checks the nuclear tube in the Shinomiya Castle.\n")
-                    io.write("Syntax:\n")
-                    io.write("-h | Displays command info.\n")
-                    io.write("-s | Checks how much time the fuel has left.\n")
-                    io.write("-g | Gives fuel to the rods.\n")
-                else 
-                    term.setTextColor(colors.red)
-                    io.write("Requires syntax: -h | -s | -g.\n")
-                    term.setTextColor(colors.white)
+        if args[1] then
+            if args[1] == "-s" then
+                rednet.send(var.mainServer, {command = "fuel", args = args})
+                term.setTextColor(colors.green)
+                io.write(var.user .. "@:~$ Command sent!")
+                term.setTextColor(colors.white)
+                local ID, packet = rednet.receive()
+                if ID == var.mainServer then
+                    local total = math.floor(packet)
+                    local h = math.floor(total / 3600)
+                    local m = math.floor((total % 3600) / 60)
+                    local s = total % 60
+                    io.write(string.format(
+                        "[Fuel] Time left: %02d:%02d:%02d\n",
+                        h,
+                        m,
+                        s
+                    ))
                 end
+            elseif args[1] == "-g" then
+                rednet.send(var.mainServer, {command = "fuel", args = args})
+                term.setTextColor(colors.green)
+                io.write(var.user .. "@:~$ Command sent!")
+                term.setTextColor(colors.white)
+            elseif args[1] == "-h" then
+                io.write("fuel\n")
+                io.write("Checks the nuclear tube in the Shinomiya Castle.\n")
+                io.write("Syntax:\n")
+                io.write("-h | Displays command info.\n")
+                io.write("-s | Checks how much time the fuel has left.\n")
+                io.write("-g | Gives fuel to the rods.\n")
+            else 
+                term.setTextColor(colors.red)
+                io.write("Requires syntax: -h | -s | -g.\n")
+                term.setTextColor(colors.white)
             end
         end
     end,
@@ -580,10 +616,10 @@ local function scriptFetch()
             term.setTextColor(colors.white)
             io.write(var.user .. "@:~/" .. shell.dir() .. "$ ")
             local file = packet.script
-            if fs.exists("scripts/" .. file) and not fs.isDir(file) then
+            if fs.exists("scripts/" .. file) and not fs.isDir(file) and not packet.script:find("../", 1, true) then
                 rednet.send(ID, "a")
                 local rID, rPacket = rednet.receive(20) 
-                if rID == ID and rPacket:lower() ~= "y" then
+                if rID == ID and rPacket ~= "y" then
                     term.setTextColor(colors.red)
                     io.write("\n[LunROS] Client " .. ID .. " requested download for file: " .. packet.script .. " has been cancelled by client.\n")
                     term.setTextColor(colors.white)
