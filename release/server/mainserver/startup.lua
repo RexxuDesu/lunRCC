@@ -83,6 +83,7 @@ while true do
             local command = packet.command
             local args = packet.args or {}
             if commands[command] then commands[command](args) end
+        end
     end
     if ID == 119 then
         rednet.send(135, "1")
