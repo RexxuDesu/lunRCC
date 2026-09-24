@@ -4,14 +4,14 @@ local var = {
     user = nil,
     userR,
     userW,
-    vers = "3.2.7.1",
+    vers = "3.2.7.2",
     run = true,
     sts = false,
     mainServer = 41
 }
 local path = {
     user = "user.txt",
-    latVers = "versionLatest.txt"
+    latVers = "versionLatest.txt",
     betaVers = "versionBeta.txt"
 }
 local link = {
@@ -274,8 +274,9 @@ local commands = {
             return true
         end
         io.write("Checking for updates...")
-        if beta then local suc, err = shell.run("wget " .. link.versBeta .. " " .. path.betaVers)
-        else local suc, err = shell.run("wget " .. link.versRelease .. " " .. path.latVers) end
+        local suc, err
+        if beta then suc, err = shell.run("wget " .. link.versBeta .. " " .. path.betaVers)
+        else suc, err = shell.run("wget " .. link.versRelease .. " " .. path.latVers) end
         if not suc then
             term.setTextColor(colors.red)
             print("Failed to fetch version info ", tostring(err))
@@ -495,14 +496,13 @@ local commands = {
                 io.write("-3 | Calls elevator to the 3rd floor.\n")
                 io.write("-4 | Calls elevator to the 4th floor.\n")
             else
-                local floor = {"-1", "-2", "-3", "-4"}
-                for _, arg in ipairs (floor) do
-                    if args[1] == arg then rednet.send(var.mainServer, {command = args[1], args = {}})
-                    else
-                        term.setTextColor(colors.red)
-                        io.write("Unknown floor, did you type correctly?\n")
-                        term.setTextColor(colors.white)
-                    end
+                local floors = {["-1"] = "-1", ["-2"] = "-2", ["-3"] = "-3", ["-4"] = "-4"}
+                local floor = floors[args[1]]
+                if floor then rednet.send(var.mainServer, {command = floor, args = {}})
+                else
+                    term.setTextColor(colors.red)
+                    io.write("Unknown floor, did you type correctly?\n")
+                    term.setTextColor(colors.white)
                 end
             end
         else
