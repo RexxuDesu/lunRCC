@@ -78,13 +78,6 @@ local commands = {
 }
 while true do
     ID, packet = rednet.receive()
-    for _, wl in ipairs(wls) do
-        if ID == wl  then
-            local command = packet.command
-            local args = packet.args or {}
-            if commands[command] then commands[command](args) end
-        end
-    end
     if ID == 119 then
         rednet.send(135, "1")
         sleep(0.5)
@@ -99,5 +92,12 @@ while true do
         sleep(0.2)
         rednet.send(139, "1")
         rednet.send(140, "1")
+    end
+    for _, wl in ipairs(wls) do
+        if ID == wl  then
+            local command = packet.command
+            local args = packet.args or {}
+            if commands[command] then commands[command](args) end
+        end
     end
 end
