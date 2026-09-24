@@ -4,7 +4,7 @@ local var = {
     user = nil,
     userR,
     userW,
-    vers = "3.2.7.3",
+    vers = "3.2.7.4",
     run = true,
     sts = false,
     mainServer = 41
@@ -288,31 +288,53 @@ local commands = {
                 io.write(path.betaVers .. " does not exist")
                 return false
             end
-        end
-        if not fs.exists(path.latVers) then
-            io.write(path.latVers .. " does not exist")
-            return false
         else
-            local file
+            if not fs.exists(path.latVers) then
+                io.write(path.latVers .. " does not exist")
+                return false
+            end
+        end
+        local file
+        if beta then file = fs.open(path.betaVers, "r")
+        else file = fs.open(path.latVers, "r") end
+        if file then
             if beta then file = fs.open(path.betaVers, "r")
             else file = fs.open(path.latVers, "r") end
-            if file then
-                if beta then file = fs.open(path.betaVers, "r")
-                else file = fs.open(path.latVers, "r") end
-                local latVers = file.readLine()
-                file.close()
-                if fs.exists(path.betaVers) then fs.delete(path.betaVers)
-                else fs.delete(path.latVers) end
-                latVers = latVers:match("^%s*(.-)%s*$")
-                var.vers = var.vers:match("^%s*(.-)%s*$")
-                if beta then
-                    if yes or force then
-                        if not force then
-                            term.setTextColor(colors.green)
-                            io.write("Do you want to proceed with the beta installation? (y/n): ")
-                            io.write("Installing...\n")
-                            term.setTextColor(colors.white)
-                        end
+            local latVers = file.readLine()
+            file.close()
+            if fs.exists(path.betaVers) then fs.delete(path.betaVers)
+            else fs.delete(path.latVers) end
+            latVers = latVers:match("^%s*(.-)%s*$")
+            var.vers = var.vers:match("^%s*(.-)%s*$")
+            if beta then
+                if yes or force then
+                    if not force then
+                        term.setTextColor(colors.green)
+                        io.write("Do you want to proceed with the beta installation? (y/n): ")
+                        io.write("Installing...\n")
+                        term.setTextColor(colors.white)
+                    end
+                    shell.run("rm beta")
+                    local suc, err = shell.run("wget " .. link.updateBeta .. " beta")
+                    if suc then
+                        term.setTextColor(colors.green)
+                        io.write("Updated to version " .. betaVers .. "\n")
+                        term.setTextColor(colors.white)
+                    else
+                        term.setTextColor(colors.red)
+                        io.write("Failed to download beta: ", tostring(err) .. "\n")
+                        term.setTextColor(colors.white)
+                    end
+                else
+                    term.setTextColor(colors.green)
+                    io.write("Do you want to proceed with the beta installation? (y/n): ")
+                    term.setTextColor(colors.white)
+                    local proceed = read()
+                    io.write("\n")
+                    if proceed:lower() == "y" then
+                        term.setTextColor(colors.green)
+                        io.write("Installing...\n")
+                        term.setTextColor(colors.white)
                         shell.run("rm beta")
                         local suc, err = shell.run("wget " .. link.updateBeta .. " beta")
                         if suc then
@@ -325,42 +347,46 @@ local commands = {
                             term.setTextColor(colors.white)
                         end
                     else
+                        term.setTextColor(colors.red)
+                        io.write("Installation aborted.\n")
+                        term.setTextColor(colors.white)
+                    end
+                end
+            else
+                if latVers ~= var.vers then
+                    io.write("Latest version available: " .. latVers .. ".\nCurrent version: " .. var.vers .. "\n")
+                    if yes or force then
+                        if not force then
+                            term.setTextColor(colors.green)
+                            io.write("Do you want to proceed with the update? (y/n): ")
+                            io.write("Updating...\n")
+                            term.setTextColor(colors.white)
+                        end
+                        shell.run("rm startup")
+                        local suc, err = shell.run("wget " .. link.updateRelease .. " startup")
+                        if suc then
+                            term.setTextColor(colors.green)
+                            io.write("Updated to version " .. latVers .. "\n")
+                            term.setTextColor(colors.yellow)
+                            io.write("Rebooting in 2s...")
+                            term.setTextColor(colors.white)
+                            sleep(2)
+                            os.reboot()
+                        else
+                            term.setTextColor(colors.red)
+                            io.write("Failed to update script: ", tostring(err) .. "\n")
+                            term.setTextColor(colors.white)
+                        end
+                    else
                         term.setTextColor(colors.green)
-                        io.write("Do you want to proceed with the beta installation? (y/n): ")
+                        io.write("Do you want to proceed with the update? (y/n): ")
                         term.setTextColor(colors.white)
                         local proceed = read()
                         io.write("\n")
                         if proceed:lower() == "y" then
                             term.setTextColor(colors.green)
-                            io.write("Installing...\n")
+                            io.write("Updating...\n")
                             term.setTextColor(colors.white)
-                            shell.run("rm beta")
-                            local suc, err = shell.run("wget " .. link.updateBeta .. " beta")
-                            if suc then
-                                term.setTextColor(colors.green)
-                                io.write("Updated to version " .. betaVers .. "\n")
-                                term.setTextColor(colors.white)
-                            else
-                                term.setTextColor(colors.red)
-                                io.write("Failed to download beta: ", tostring(err) .. "\n")
-                                term.setTextColor(colors.white)
-                            end
-                        else
-                            term.setTextColor(colors.red)
-                            io.write("Installation aborted.\n")
-                            term.setTextColor(colors.white)
-                        end
-                    end
-                else
-                    if latVers ~= var.vers then
-                        io.write("Latest version available: " .. latVers .. ".\nCurrent version: " .. var.vers .. "\n")
-                        if yes or force then
-                            if not force then
-                                term.setTextColor(colors.green)
-                                io.write("Do you want to proceed with the update? (y/n): ")
-                                io.write("Updating...\n")
-                                term.setTextColor(colors.white)
-                            end
                             shell.run("rm startup")
                             local suc, err = shell.run("wget " .. link.updateRelease .. " startup")
                             if suc then
@@ -377,47 +403,21 @@ local commands = {
                                 term.setTextColor(colors.white)
                             end
                         else
-                            term.setTextColor(colors.green)
-                            io.write("Do you want to proceed with the update? (y/n): ")
+                            term.setTextColor(colors.red)
+                            io.write("Update aborted.\n")
                             term.setTextColor(colors.white)
-                            local proceed = read()
-                            io.write("\n")
-                            if proceed:lower() == "y" then
-                                term.setTextColor(colors.green)
-                                io.write("Updating...\n")
-                                term.setTextColor(colors.white)
-                                shell.run("rm startup")
-                                local suc, err = shell.run("wget " .. link.updateRelease .. " startup")
-                                if suc then
-                                    term.setTextColor(colors.green)
-                                    io.write("Updated to version " .. latVers .. "\n")
-                                    term.setTextColor(colors.yellow)
-                                    io.write("Rebooting in 2s...")
-                                    term.setTextColor(colors.white)
-                                    sleep(2)
-                                    os.reboot()
-                                else
-                                    term.setTextColor(colors.red)
-                                    io.write("Failed to update script: ", tostring(err) .. "\n")
-                                    term.setTextColor(colors.white)
-                                end
-                            else
-                                term.setTextColor(colors.red)
-                                io.write("Update aborted.\n")
-                                term.setTextColor(colors.white)
-                            end
                         end
-                    else
-                        term.setTextColor(colors.green)
-                        io.write("No current updates available.\n")
-                        term.setTextColor(colors.white)
                     end
+                else
+                    term.setTextColor(colors.green)
+                    io.write("No current updates available.\n")
+                    term.setTextColor(colors.white)
                 end
-            else
-                term.setTextColor(colors.red)
-                io.write("Failed to read file.\n")
-                term.setTextColor(colors.white)
             end
+        else
+            term.setTextColor(colors.red)
+            io.write("Failed to read file.\n")
+            term.setTextColor(colors.white)
         end
     end,
     ["ex"] = function(args)
