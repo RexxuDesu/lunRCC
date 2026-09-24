@@ -82,11 +82,20 @@ while true do
         if ID == wl  then
             local command = packet.command
             local args = packet.args or {}
-            if commands[command] then
-                commands[command](args)
-            end
-        elseif ID == 137 then
-            rednet.send(var.e0, "0")
-        end
+            if commands[command] then commands[command](args) end
+    end
+    if ID == 119 then
+        rednet.send(135, "1")
+        sleep(0.5)
+        rednet.send(140, "1")
+        rednet.send(136, "1")
+        sleep(0.2)
+        rednet.send(139, "1")
+    elseif ID == 137 then
+        rednet.send(135, "1")
+        rednet.send(136, "1")
+        sleep(0.2)
+        rednet.send(139, "1")
+        rednet.send(140, "1")
     end
 end
