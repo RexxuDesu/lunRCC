@@ -597,7 +597,6 @@ local function scriptFetch()
                         term.setTextColor(colors.white)
                         io.write(var.user .. "@:~/" .. shell.dir() .. "$ ")
                     end
-                    end
                 end
             else
                 term.setTextColor(colors.red)
