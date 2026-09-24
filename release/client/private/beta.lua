@@ -4,7 +4,7 @@ local var = {
     user = nil,
     userR,
     userW,
-    vers = "3.2.7.4",
+    vers = "3.2.7.5",
     run = true,
     sts = false,
     mainServer = 41
@@ -318,7 +318,7 @@ local commands = {
                     local suc, err = shell.run("wget " .. link.updateBeta .. " beta")
                     if suc then
                         term.setTextColor(colors.green)
-                        io.write("Updated to version " .. betaVers .. "\n")
+                        io.write("Updated to version " .. latVers .. "\n")
                         term.setTextColor(colors.white)
                     else
                         term.setTextColor(colors.red)
@@ -339,7 +339,7 @@ local commands = {
                         local suc, err = shell.run("wget " .. link.updateBeta .. " beta")
                         if suc then
                             term.setTextColor(colors.green)
-                            io.write("Updated to version " .. betaVers .. "\n")
+                            io.write("Updated to version " .. latVers .. "\n")
                             term.setTextColor(colors.white)
                         else
                             term.setTextColor(colors.red)
