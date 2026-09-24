@@ -4,7 +4,7 @@ local var = {
     user = nil,
     userR,
     userW,
-    vers = "3.2.6.5",
+    vers = "3.2.6.6",
     run = true,
     sts = false,
     mainServer = 41
@@ -54,6 +54,13 @@ local function checkFiles()
     var.user = file.readLine()
     file.close()
 end
+local function clearKey()
+    local timer = os.startTimer(0)
+    while true do
+        local event, param = os.pullEventRaw()
+        if event == "timer" and param == timer then break end
+    end
+end
 local function stasis()
     shell.run("clear")
     io.write("Press any of the keys below to pull your pearl:\n")
@@ -66,19 +73,19 @@ local function stasis()
         if key == keys.t then
             rednet.send(123, "1")
             var.sts = false
-            return true
         elseif key == keys.v then
             rednet.send(127, "1")
             var.sts = false
-            return true
         elseif key == keys.r then
             rednet.send(119, "1")
             var.sts = false
-            return true
         elseif key == keys.c then
-            var.sts = false
-            return true
+           var.sts = false 
         end
+        clearKey()
+        shell.run("clear")
+        io.write("[LunROS version: " .. var.vers .. "]\n")
+        return true
     end
 end
 local commands = {
