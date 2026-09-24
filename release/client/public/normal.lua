@@ -4,7 +4,7 @@ local var = {
     user = nil,
     userR,
     userW,
-    vers = "3.2.6.4",
+    vers = "3.2.6.5",
     run = true,
     sts = false
 }
@@ -14,7 +14,7 @@ local path = {
 }
 local link = {
     vers = "https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/release/client/public/version.txt",
-    update = "https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/release/client/public/client.lua"
+    update = "https://raw.githubusercontent.com/RexxuDesu/lunRCC/refs/heads/main/release/client/public/normal.lua"
 }
 local function cmdRes() -- DO NOT TOUCH
     term.setTextColor(colors.green)
@@ -238,7 +238,7 @@ local commands = {
             io.write("Force updating...\n")
             term.setTextColor(colors.white)
             shell.run("rm startup")
-            local suc, err = shell.run("wget " .. link.update .. " startup")
+            local suc, err = shell.run("wget " .. link.update .. " lunr")
             if suc then
                 term.setTextColor(colors.yellow)
                 io.write("Rebooting in 2s...")
@@ -276,7 +276,7 @@ local commands = {
                         io.write("Updating...\n")
                         term.setTextColor(colors.white)
                         shell.run("rm startup")
-                        local suc, err = shell.run("wget " .. link.update .. " startup")
+                        local suc, err = shell.run("wget " .. link.update .. " lunr")
                         if suc then
                             term.setTextColor(colors.green)
                             io.write("Updated to version " .. latVers .. "\n")
@@ -302,7 +302,7 @@ local commands = {
                             io.write("Updating...\n")
                             term.setTextColor(colors.white)
                             shell.run("rm startup")
-                            local suc, err = shell.run("wget " .. link.update .. " startup")
+                            local suc, err = shell.run("wget " .. link.update .. " lunr")
                             if suc then
                                 term.setTextColor(colors.green)
                                 io.write("Updated to version " .. latVers .. "\n")
@@ -336,6 +336,25 @@ local commands = {
                 term.setTextColor(colors.white)
                 return false
             end
+        end
+    end,
+    ["ex"] = function(args)
+        if args[1] then
+            if args[1] == "-h" then
+                io.write("ex\n")
+                io.write("Terminates the program\n")
+            else 
+                term.setTextColor(colors.red)
+                io.write("Command does not accept a syntax.\n")
+                term.setTextColor(colors.white)            
+            end
+        else 
+            term.setTextColor(colors.yellow)
+            io.write(var.user .. "@:~$ Goodbye!\n")
+            term.setTextColor(colors.white)
+            sleep(1)
+            shell.run("clear")
+            var.run = false
         end
     end,
     ["net"] = function(args)
