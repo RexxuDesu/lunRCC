@@ -4,7 +4,7 @@ local var = {
     user = nil,
     userR,
     userW,
-    vers = "3.2.6.6",
+    vers = "3.2.6.7",
     run = true,
     sts = false
 }
@@ -414,10 +414,10 @@ local function scriptFetch()
             term.setTextColor(colors.white)
             io.write(var.user .. "@:~/" .. shell.dir() .. "$ ")
             local file = packet.script
-            if fs.exists("scripts/" .. file) and not fs.isDir(file) then
+            if fs.exists("scripts/" .. file) and not fs.isDir(file) and not packet.script:find("../", 1, true) then
                 rednet.send(ID, "a")
                 local rID, rPacket = rednet.receive(20) 
-                if rID == ID and rPacket:lower() ~= "y" then
+                if rID == ID and rPacket ~= "y" then
                     term.setTextColor(colors.red)
                     io.write("\n[LunROS] Client " .. ID .. " requested download for file: " .. packet.script .. " has been cancelled by client.\n")
                     term.setTextColor(colors.white)
