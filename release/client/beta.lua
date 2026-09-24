@@ -452,25 +452,16 @@ local commands = {
                 io.write("-2 | Calls elevator to the 2nd floor.\n")
                 io.write("-3 | Calls elevator to the 3rd floor.\n")
                 io.write("-4 | Calls elevator to the 4th floor.\n")
-            elseif args[1] == "-0" then
-                rednet.send(var.mainServer, {command = "e0", args = {}})
-                cmdRes()
-            elseif args[1] == "-1" then
-                rednet.send(var.mainServer, {command = "e1", args = {}})
-                cmdRes()
-            elseif args[1] == "-2" then
-                rednet.send(var.mainServer, {command = "e2", args = {}})
-                cmdRes()
-            elseif args[1] == "-3" then
-                rednet.send(var.mainServer, {command = "e3", args = {}})
-                cmdRes()
-            elseif args[1] == "-4" then
-                rednet.send(var.mainServer, {command = "e4", args = {}})
-                cmdRes()
             else
-                term.setTextColor(colors.red)
-                io.write("Unknown floor, did you type correctly?\n")
-                term.setTextColor(colors.white)
+                local floor = {"-1", "-2", "-3", "-4"}
+                for _, arg in ipairs (floor) do
+                    if args[1] == arg then rednet.send(var.mainServer, {command = args[1], args = {}})
+                    else
+                        term.setTextColor(colors.red)
+                        io.write("Unknown floor, did you type correctly?\n")
+                        term.setTextColor(colors.white)
+                    end
+                end
             end
         else
             term.setTextColor(colors.red)
@@ -583,27 +574,30 @@ local function scriptFetch()
             term.setTextColor(colors.white)
             io.write(var.user .. "@:~/" .. shell.dir() .. "$ ")
             local file = packet.script
-            if fs.exists("scripts/" .. file) and not fs.isDir(file) then
+            if fs.exists("scripts/" .. file) and not fs.isDir(file) and not packet.script:find("../", 1, true) then -- this should stop changing back to the parent DIR
                 rednet.send(ID, "a")
                 local rID, rPacket = rednet.receive(20) 
-                if rID == ID and rPacket:lower() ~= "y" then
-                    term.setTextColor(colors.red)
-                    io.write("\n[LunROS] Client " .. ID .. " requested download for file: " .. packet.script .. " has been cancelled by client.\n")
-                    term.setTextColor(colors.white)
-                    io.write(var.user .. "@:~/" .. shell.dir() .. "$ ")
-                else
-                    term.setTextColor(colors.yellow)
-                    io.write("\n[LunROS] Client " .. ID .. " downloading file: " .. packet.script .. ".\n")
-                    term.setTextColor(colors.white)
-                    io.write(var.user .. "@:~/" .. shell.dir() .. "$ ")
-                    local localFile = io.open(("scripts/" .. file), "r")
-                    local content = localFile:read("*a")
-                    localFile:close()
-                    rednet.send(ID, content)
-                    term.setTextColor(colors.green)
-                    io.write("\n[LunROS] Script: " .. file .. " downloaded to client " .. ID .. ".\n")
-                    term.setTextColor(colors.white)
-                    io.write(var.user .. "@:~/" .. shell.dir() .. "$ ")
+                if rID == ID and rPacket then
+                    if rPacket:lower() ~= "y" then
+                        term.setTextColor(colors.red)
+                        io.write("\n[LunROS] Client " .. ID .. " requested download for file: " .. packet.script .. " has been cancelled by client.\n")
+                        term.setTextColor(colors.white)
+                        io.write(var.user .. "@:~/" .. shell.dir() .. "$ ")
+                    else
+                        term.setTextColor(colors.yellow)
+                        io.write("\n[LunROS] Client " .. ID .. " downloading file: " .. packet.script .. ".\n")
+                        term.setTextColor(colors.white)
+                        io.write(var.user .. "@:~/" .. shell.dir() .. "$ ")
+                        local localFile = io.open(("scripts/" .. file), "r")
+                        local content = localFile:read("*a")
+                        localFile:close()
+                        rednet.send(ID, content)
+                        term.setTextColor(colors.green)
+                        io.write("\n[LunROS] Script: " .. file .. " downloaded to client " .. ID .. ".\n")
+                        term.setTextColor(colors.white)
+                        io.write(var.user .. "@:~/" .. shell.dir() .. "$ ")
+                    end
+                    end
                 end
             else
                 term.setTextColor(colors.red)
