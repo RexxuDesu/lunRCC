@@ -4,7 +4,7 @@ local var = {
     user = nil,
     userR,
     userW,
-    vers = "3.2.6.7",
+    vers = "3.2.6.8",
     run = true,
     sts = false,
     mainServer = 41
@@ -496,7 +496,7 @@ local commands = {
     ["fuel"] = function(args)
         if args[1] then
             if args[1] == "-s" then
-                rednet.send(var.mainServer, {command = "fuel", args = args[1]})
+                rednet.send(var.mainServer, {command = "fuel", args = args})
                 term.setTextColor(colors.green)
                 io.write(var.user .. "@:~$ Command sent!")
                 term.setTextColor(colors.white)
@@ -514,7 +514,7 @@ local commands = {
                     ))
                 end
             elseif args[1] == "-g" then
-                rednet.send(var.mainServer, {command = "fuel", args = args[1]})
+                rednet.send(var.mainServer, {command = "fuel", args = args})
                 term.setTextColor(colors.green)
                 io.write(var.user .. "@:~$ Command sent!")
                 term.setTextColor(colors.white)
