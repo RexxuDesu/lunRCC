@@ -4,7 +4,7 @@ local var = {
     user = nil,
     userR,
     userW,
-    vers = "3.2.6.3",
+    vers = "3.2.6.4",
     run = true,
     sts = false
 }
