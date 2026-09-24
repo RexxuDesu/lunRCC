@@ -91,6 +91,7 @@ while true do
         rednet.send(136, "1")
         sleep(0.2)
         rednet.send(139, "1")
+        rednet.send(134, "1")
     elseif ID == 137 then
         rednet.send(135, "1")
         rednet.send(136, "1")
