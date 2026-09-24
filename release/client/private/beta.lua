@@ -4,7 +4,7 @@ local var = {
     user = nil,
     userR,
     userW,
-    vers = "3.2.7.2",
+    vers = "3.2.7.3",
     run = true,
     sts = false,
     mainServer = 41
@@ -496,7 +496,7 @@ local commands = {
                 io.write("-3 | Calls elevator to the 3rd floor.\n")
                 io.write("-4 | Calls elevator to the 4th floor.\n")
             else
-                local floors = {["-1"] = "-1", ["-2"] = "-2", ["-3"] = "-3", ["-4"] = "-4"}
+                local floors = {["-1"] = "e1", ["-2"] = "e2", ["-3"] = "e3", ["-4"] = "e4"}
                 local floor = floors[args[1]]
                 if floor then rednet.send(var.mainServer, {command = floor, args = {}})
                 else
