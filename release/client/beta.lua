@@ -4,7 +4,7 @@ local var = {
     user = nil,
     userR,
     userW,
-    vers = "3.2.6.4",
+    vers = "3.2.6.5",
     run = true,
     sts = false,
     mainServer = 41
@@ -64,15 +64,15 @@ local function stasis()
     while var.sts do
         local _, key = os.pullEvent("key")
         if key == keys.t then
-            rednet.send(0, "1")
+            rednet.send(123, "1")
             var.sts = false
             return true
         elseif key == keys.v then
-            rednet.send(0, "1")
+            rednet.send(127, "1")
             var.sts = false
             return true
         elseif key == keys.r then
-            rednet.send(0, "1")
+            rednet.send(119, "1")
             var.sts = false
             return true
         elseif key == keys.c then
@@ -256,8 +256,12 @@ local commands = {
         if script then
             shell.run("rm scripts/client")
             shell.run("rm scripts/rukeiSubServer")
+            shell.run("rm scripts/stasisServer")
+            shell.run("rm scripts/stasisPuller")
             if not fs.exists("scripts/client") then shell.run(scripts.client) end
             if not fs.exists("scripts/rukeiSubServer") then shell.run(scripts.rukeiSubServer) end
+            if not fs.exists("scripts/stasisServer") then shell.run(scripts.stasisServer) end
+            if not fs.exists("scripts/stasisPuller") then shell.run(scripts.stasisPuller) end
             shell.run("clear")
             return true
         end
@@ -380,7 +384,7 @@ local commands = {
             term.setTextColor(colors.yellow)
             io.write(var.user .. "@:~$ Goodbye!\n")
             term.setTextColor(colors.white)
-            sleep(1.3)
+            sleep(1)
             shell.run("clear")
             var.run = false
         end
