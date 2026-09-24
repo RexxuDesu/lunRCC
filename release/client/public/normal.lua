@@ -399,6 +399,48 @@ local commands = {
         end
     end
 }
+local function scriptFetch()
+    while var.run do
+        local ID, packet = rednet.receive()
+        if type(packet) == "table" and packet.action == "fetch" then
+            term.setTextColor(colors.yellow)
+            io.write("\n[LunROS] Client " .. ID .. " requesting download for file: " .. packet.script .. ".\n")
+            term.setTextColor(colors.white)
+            io.write(var.user .. "@:~/" .. shell.dir() .. "$ ")
+            local file = packet.script
+            if fs.exists("scripts/" .. file) and not fs.isDir(file) then
+                rednet.send(ID, "a")
+                local rID, rPacket = rednet.receive(20) 
+                if rID == ID and rPacket:lower() ~= "y" then
+                    term.setTextColor(colors.red)
+                    io.write("\n[LunROS] Client " .. ID .. " requested download for file: " .. packet.script .. " has been cancelled by client.\n")
+                    term.setTextColor(colors.white)
+                    io.write(var.user .. "@:~/" .. shell.dir() .. "$ ")
+                else
+                    term.setTextColor(colors.yellow)
+                    io.write("\n[LunROS] Client " .. ID .. " downloading file: " .. packet.script .. ".\n")
+                    term.setTextColor(colors.white)
+                    io.write(var.user .. "@:~/" .. shell.dir() .. "$ ")
+                    local localFile = io.open(("scripts/" .. file), "r")
+                    local content = localFile:read("*a")
+                    localFile:close()
+                    rednet.send(ID, content)
+                    term.setTextColor(colors.green)
+                    io.write("\n[LunROS] Script: " .. file .. " downloaded to client " .. ID .. ".\n")
+                    term.setTextColor(colors.white)
+                    io.write(var.user .. "@:~/" .. shell.dir() .. "$ ")
+                end
+            else
+                term.setTextColor(colors.red)
+                io.write("\n[LunROS] Unknown file: " .. file .. ". Is the client smoking drugs?" .. ".\n")
+                term.setTextColor(colors.white)
+                io.write(var.user .. "@:~/" .. shell.dir() .. "$ ")
+                rednet.send(ID, "Error: File can't be processed")
+            end
+            term.setTextColor(colors.white)
+        end
+    end
+end
 local function main()
     checkFiles()
     io.write("Public release.\n")
@@ -426,4 +468,4 @@ local function main()
         end
     end
 end
-main()
+parallel.waitForAny(main, scriptFetch)
