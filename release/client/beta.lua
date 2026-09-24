@@ -574,7 +574,7 @@ local function scriptFetch()
             term.setTextColor(colors.white)
             io.write(var.user .. "@:~/" .. shell.dir() .. "$ ")
             local file = packet.script
-            if fs.exists("scripts/" .. file) and not fs.isDir(file) and not packet.script:find("../", 1, true) then -- this should stop changing back to the parent DIR
+            if fs.exists("scripts/" .. file) and not fs.isDir(file) and not packet.script:find("../", 1, true) then
                 rednet.send(ID, "a")
                 local rID, rPacket = rednet.receive(20) 
                 if rID == ID and rPacket ~= "y" then
