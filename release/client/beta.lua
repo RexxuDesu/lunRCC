@@ -445,6 +445,9 @@ local commands = {
                 io.write("-2 | Calls elevator to the 2nd floor.\n")
                 io.write("-3 | Calls elevator to the 3rd floor.\n")
                 io.write("-4 | Calls elevator to the 4th floor.\n")
+            elseif args[1] == "-0" then
+                rednet.send(var.mainServer, {command = "e0", args = {}})
+                cmdRes()
             elseif args[1] == "-1" then
                 rednet.send(var.mainServer, {command = "e1", args = {}})
                 cmdRes()

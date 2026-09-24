@@ -1,14 +1,17 @@
-rednet.open(peripheral.getName(peripheral.find("modem")))
+if not peripheral.find("modem") then io.write("Unable to find modem. Quitting in 2s...\n") sleep (2) os.reboot()
+else rednet.open(peripheral.getName(peripheral.find("modem"))) end
 local var = {
     craft = 60,
     server = 42,
     gate = 66,
+    e0 = 134,
     e1 = 65,
     e2 = 63,
     e3 = 64,
     e4 = 62,
     fuel = 78
 }
+local wls = {7, 85} 
 local x = 1
 local y = 1
 local ID, packet
@@ -31,6 +34,10 @@ local commands = {
     ["gate"] = function()
         rednet.send(var.gate, "1")
         display("ID: " .. ID .. " sent command: gate.\n")
+    end,
+    ["e0"] = function()
+        rednet.send(var.e0, "1")
+        display("ID: " .. ID .. " sent command: e0.\n")
     end,
     ["e1"] = function()
         rednet.send(var.e1, "1")
@@ -71,11 +78,15 @@ local commands = {
 }
 while true do
     ID, packet = rednet.receive()
-    if ID == 7 or ID == 85 then
-        local command = packet.command
-        local args = packet.args or {}
-        if commands[command] then
-            commands[command](args)
+    for _, wl in ipairs(wls) do
+        if ID == wl  then
+            local command = packet.command
+            local args = packet.args or {}
+            if commands[command] then
+                commands[command](args)
+            end
+        elseif ID == 137 then
+            rednet.send(var.e0, "0")
         end
     end
 end
